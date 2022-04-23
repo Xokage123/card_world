@@ -10,7 +10,7 @@ import { Layout } from 'components/Layout'
 import { MainContainer } from 'components/MainContainer';
 
 import { themeMaterial } from 'const/styles';
-import { linksWithLayout } from 'const/links';
+import { linksWithoutLayout } from 'const/links';
 
 import { AuthProvider } from 'context/auth.provider';
 
@@ -22,7 +22,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
   const [isShowLayout, setIsShowLayout] = useState<boolean>(false)
 
   useEffect(() => {
-    setIsShowLayout(!!linksWithLayout.find(link => link === router.pathname))
+    setIsShowLayout(!linksWithoutLayout.find(link => link === router.pathname))
   }, [router.pathname])
 
   const renderContent = useCallback(() => {

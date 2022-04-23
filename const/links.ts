@@ -4,6 +4,6 @@ export enum LINKS {
   news = '/news'
 }
 
-export const linksWithLayout = [
-  LINKS.home
+export const linksWithoutLayout = [
+  LINKS.auth,
 ]
