@@ -1,0 +1,5 @@
+{
+  "mongoUri": "mongodb://maksimka:s5gQ2ofP7aJ4ZKsH@cluster0-shard-00-00.ozw7o.mongodb.net:27017,cluster0-shard-00-01.ozw7o.mongodb.net:27017,cluster0-shard-00-02.ozw7o.mongodb.net:27017/myFirstDatabase?ssl=true&replicaSet=atlas-115i9w-shard-0&authSource=admin&retryWrites=true&w=majority",
+  "jwtSecret": "n*?KAycpngrW@zbTwqYjPHBH1~Tz2YVm3cZc%||u~f~jPsHamDZ?x6vbz%hAexZBGEPrr3c{wt3t3X@3Pabu0EVz25}H8el??F|",
+  "baseUrl": "http://localhost:3000/api"
+}

@@ -19,6 +19,12 @@ export const AuthProvider: FC<Props> = (props) => {
 
   const statusAuth = useRecoilValue(atom_statusAuth)
 
+  const forbiddenLinks: string[]  = [
+    LINKS.registration,
+    '/404',
+    '/500'
+  ]
+
   useEffect(() => {
     if (statusAuth) {
       if (router.pathname === LINKS.home) {
@@ -26,12 +32,14 @@ export const AuthProvider: FC<Props> = (props) => {
           pathname: LINKS.news
         })
       }
-    } else {
+    } else if (!forbiddenLinks.includes(router.pathname)) {
       router.push({
         pathname: LINKS.auth
       })
     }
-  }, [router, statusAuth])
+  }, [statusAuth])
+
+  if (router.pathname === LINKS.home) return null
 
   return (
     <authContext.Provider value={statusAuth}>

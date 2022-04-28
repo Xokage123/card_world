@@ -2,7 +2,9 @@ import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
+import { ToastContainer } from 'react-toastify'
 import { RecoilRoot } from 'recoil'
+import { connect } from 'mongoose';
 
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -14,15 +16,28 @@ import { linksWithoutLayout } from 'const/links';
 
 import { AuthProvider } from 'context/auth.provider';
 
+import 'react-toastify/dist/ReactToastify.css';
 import 'styles/globals.scss'
+import '../components/Error/error.sass';
+
+import { CallMissedOutgoingTwoTone } from '@mui/icons-material';
+import instance from 'api';
+import { URL } from 'api/const';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter()
 
+  useEffect(() => {
+    instance({
+      url: URL.db_connect
+    })
+    .then(console.log)
+  }, [])
+
   const [isShowLayout, setIsShowLayout] = useState<boolean>(false)
 
   useEffect(() => {
-    setIsShowLayout(!linksWithoutLayout.find(link => link === router.pathname))
+    setIsShowLayout(!linksWithoutLayout.includes(router.pathname))
   }, [router.pathname])
 
   const renderContent = useCallback(() => {
@@ -31,7 +46,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <Component {...pageProps} />
       </Layout>
     ) : (
-      <MainContainer>
+      <MainContainer classes='height_100'>
         <Component {...pageProps} />
       </MainContainer>
     )
@@ -50,6 +65,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         />
         <link rel="icon" href="/favicon.ico" />
       </Head>
+
       <RecoilRoot>
         <ThemeProvider theme={themeMaterial}>
           <AuthProvider>
@@ -57,6 +73,18 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
           </AuthProvider>
         </ThemeProvider>
       </RecoilRoot>
+
+      <ToastContainer
+        position='top-right'
+        autoClose={2500}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+      />
     </>
   )
 }

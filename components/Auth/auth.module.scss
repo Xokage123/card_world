@@ -1,0 +1,45 @@
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.title {
+  text-align: center;
+}
+
+.form {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 40vw;
+
+  padding: 15px;
+
+  border: 1px solid black;
+  border-radius: 10px;
+}
+
+.input {
+  &Container {
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  &Label {
+    padding-bottom: 5px;
+
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.button {
+}
