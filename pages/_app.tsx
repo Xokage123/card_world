@@ -4,7 +4,9 @@ import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
 import { ToastContainer } from 'react-toastify'
 import { RecoilRoot } from 'recoil'
-import { connect } from 'mongoose';
+
+import instance from 'api';
+import { URL } from 'api/const';
 
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -18,11 +20,8 @@ import { AuthProvider } from 'context/auth.provider';
 
 import 'react-toastify/dist/ReactToastify.css';
 import 'styles/globals.scss'
-import '../components/Error/error.sass';
-
-import { CallMissedOutgoingTwoTone } from '@mui/icons-material';
-import instance from 'api';
-import { URL } from 'api/const';
+import 'components/Error/error.sass';
+import StartProvider from 'context/start.provider';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter()
@@ -31,7 +30,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
     instance({
       url: URL.db_connect
     })
-    .then(console.log)
   }, [])
 
   const [isShowLayout, setIsShowLayout] = useState<boolean>(false)
@@ -69,7 +67,9 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       <RecoilRoot>
         <ThemeProvider theme={themeMaterial}>
           <AuthProvider>
-            {renderContent()}
+            <StartProvider>
+              {renderContent()}
+            </StartProvider>
           </AuthProvider>
         </ThemeProvider>
       </RecoilRoot>

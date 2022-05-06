@@ -2,11 +2,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 import nodemailer from 'nodemailer'
 import bcrypt from 'bcryptjs'
+import config from 'config'
 
 import { METHODS } from 'api/const'
 import { Response } from 'api/types'
 
 import { Nullable } from 'types/global'
+import { MailOptions } from 'nodemailer/lib/sendmail-transport'
 
 export interface FetchEmail {
   email: string
@@ -28,26 +30,29 @@ const handler = async (
     try {
       const emailCode = Math.floor(Math.random() * 90_000) + 10_000;
 
+      const user: string = config.get('mail_login')
+      const pass: string = config.get('mail_password')
+
       const transportConfig = {
-        service: 'gmail',
+        host:'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
-          user: process.env.EMAIL_LOGIN,
-          pass: process.env.EMAIL_PASSWORD,
-        }
+          user,
+          pass,
+        } 
       }
 
       const transporter = nodemailer.createTransport(transportConfig);
 
-      const mailOptions = {
-        from: process.env.EMAIL_LOGIN,
+      const mailOptions: MailOptions = {
+        from: '"Проверка почты" <maxartem0419@gmail.com>',
         to: 'maxartem0419@gmail.com',
         subject: "Подтверждение регистрация на CardWorld",
-        text: "Use the following 5 digit code to confirm your email address \n" + emailCode.toString()
+        text: `Use the following 5 digit code to confirm your email address \n${emailCode.toString()}`,
       };
 
       const info = await transporter.sendMail(mailOptions);
-
-      console.log("Message sent: %s", info.messageId);
 
       const salt = bcrypt.genSaltSync(20)
 

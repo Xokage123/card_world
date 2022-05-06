@@ -1,10 +1,10 @@
 import { useRouter } from "next/router"
 import { createContext, FC, ReactNode, useEffect } from "react"
-import { useRecoilValue } from 'recoil'
+import { useRecoilValue, useSetRecoilState } from 'recoil'
 
 import { atom_statusAuth } from 'reacoil/atoms/auth'
 
-import { LINKS } from "const/links"
+import { LINKS, startPageLink } from "const/links"
 
 interface Props {
   children: ReactNode
@@ -16,6 +16,8 @@ export const AuthProvider: FC<Props> = (props) => {
   const { children } = props
 
   const router = useRouter()
+
+  const setStatusAuth = useSetRecoilState(atom_statusAuth);
 
   const statusAuth = useRecoilValue(atom_statusAuth)
 
@@ -29,7 +31,7 @@ export const AuthProvider: FC<Props> = (props) => {
     if (statusAuth) {
       if (router.pathname === LINKS.home) {
         router.push({
-          pathname: LINKS.news
+          pathname: startPageLink
         })
       }
     } else if (!forbiddenLinks.includes(router.pathname)) {

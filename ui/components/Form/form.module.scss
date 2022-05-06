@@ -1,0 +1,30 @@
+.title {
+  text-align: center;
+}
+
+.form {
+  display: inline-flex;
+  flex-direction: column;
+  gap: 20px;
+  width: 40vw;
+}
+
+.input {
+  &Container {
+    display: inline-flex;
+    flex-direction: column;
+  }
+
+  &Label {
+    padding-bottom: 5px;
+
+    font-size: 18px;
+    font-weight: 700;
+  }
+}
+
+.buttons {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}

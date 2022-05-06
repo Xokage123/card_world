@@ -3,6 +3,7 @@ import { FC } from 'react';
 import Typography from '@mui/material/Typography';
 
 import { MainContainer } from 'components/MainContainer';
+import { Navigate } from 'components/Navigate';
 
 import { themeMaterial } from 'const/styles';
 
@@ -14,19 +15,8 @@ export const Header: FC = () => {
   return (
     <header
       className={styles.header}
-      style={{
-        backgroundColor: palette.grey[300]
-      }}>
-      <MainContainer classes={styles.container}>
-        <Typography
-          variant='h3'
-          sx={{
-            color: palette.secondary.main
-          }}
-        >
-          Card World
-        </Typography>
-      </MainContainer>
+    >
+      <Navigate />
     </header>
   );
 }

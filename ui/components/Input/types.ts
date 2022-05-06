@@ -9,6 +9,7 @@ export interface InputProps extends Omit<OutlinedTextFieldProps, 'onChange' | 'e
   type: InputType;
   placeholder: string
   error?: string
+  label: string
 }
 
 export interface FieldProps extends FormikFieldProps, OutlinedTextFieldProps {
@@ -18,4 +19,17 @@ export interface FieldProps extends FormikFieldProps, OutlinedTextFieldProps {
 
 export interface ErrorProps {
   text: string
+}
+
+export enum FIELDS {
+  email = 'email',
+  password = 'password',
+  secret_key = 'secret_key'
+}
+
+export interface IField {
+  title: string;
+  name: FIELDS;
+  type: InputType;
+  placeholder: string
 }

@@ -41,8 +41,6 @@ export const RegistrationContent: FC = () => {
   ], [])
 
   const handleSubmit = async (values: Values) => {
-    console.log(values)
-
     const { email, password } = values
 
     const data: FetchEmail = {
@@ -62,10 +60,8 @@ export const RegistrationContent: FC = () => {
       toast.success(`Мы отправили код на почту: ${email}`, {
         toastId: URL.email
       })
-      console.log(res)
     })
     .catch((error: AxiosError<FetchEmail>) => {
-      console.log(error)
     })
   }
 

@@ -28,3 +28,13 @@ input {
 .height_100 {
   height: 100vh;
 }
+
+.full {
+  &-width {
+    width: 100%
+  }
+
+  &-height {
+    height: 100%
+  }
+}
