@@ -20,7 +20,7 @@ const Error: FC<ErrorProps> = (props) => {
 }
 
 export const InputElement: FC<InputProps> = (props) => {
-  const { type = 'text', value, onChange, placeholder, error, label, variant} = props
+  const { type = 'text', value, onChange, placeholder, error, label, variant } = props
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const value = event.target.value
@@ -44,7 +44,7 @@ export const InputElement: FC<InputProps> = (props) => {
 }
 
 export const FieldElement: FC<FieldProps> = (props) => {
-  const { field, meta: { touched, error }, type, placeholder, label, variant} = props
+  const { field, meta: { touched, error }, type, placeholder, label, variant } = props
 
   const inputProps = {
     type,

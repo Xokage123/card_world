@@ -8,3 +8,7 @@ export interface Response<T> {
 export interface Codes {
   [k: string]: number | number[]
 }
+
+export interface JWTData {
+  userId: string
+}

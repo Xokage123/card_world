@@ -2,8 +2,20 @@ export enum LINKS {
   home = '/',
   auth = '/auth',
   news = '/news',
+  cards = '/cards',
+  tournament = '/tournament',
   registration = '/registration',
   reset_password = '/reset_password',
+}
+
+interface ObjectString {
+  [key: string]: string
+}
+
+export const namesNavigateItem: ObjectString = {
+  [LINKS.news]: 'Новости',
+  [LINKS.tournament]: 'Турнир',
+  [LINKS.cards]: 'База карт',
 }
 
 export const linksWithoutLayout: string[] = [
@@ -13,3 +25,15 @@ export const linksWithoutLayout: string[] = [
   '/404',
   '/500'
 ]
+
+export const startPageLink: LINKS = LINKS.tournament
+
+export interface NavigateItem {
+  name: string;
+  url: string
+}
+
+export const navigateItems: NavigateItem[] = Object.keys(namesNavigateItem).map(url => ({
+  name: namesNavigateItem[url],
+  url
+}))
