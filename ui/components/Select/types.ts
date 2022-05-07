@@ -1,6 +1,7 @@
 export interface Props {
   label: string;
   isValid?: boolean;
+  disabled?: boolean;
   name: string;
   options: Option[];
   value: string;

@@ -1,4 +1,5 @@
-import { FC, useState, useMemo } from 'react';
+import dynamic from 'next/dynamic'
+import { FC, useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify'
 import cn from 'classnames'
 import { Formik, FormikProps } from 'formik';
@@ -9,6 +10,9 @@ import { URL, METHODS, LocalKeys } from 'api/const'
 import { Response } from 'api/types'
 
 import { RoleUser } from 'backend/models/User'
+
+const Bracket = dynamic(() => import('./components/Bracket/Bracket'))
+const Information = dynamic(() => import('./components/Information/Information'))
 
 import { Body } from 'pages/api/check_role_user'
 
@@ -26,33 +30,27 @@ import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
 import {
   selector_gamesOptions,
-  selector_actualGame
+  selector_actualGame,
+  atom_gameInformation
 } from 'reacoil/atoms/games';
 
 import styles from './tournament.module.scss';
-
-const ISSERVER = typeof window === "undefined";
 
 export const Tournament: FC = () => {
   const [open, setOpen] = useState<boolean>(true)
 
   const [actualGame, setActualGame] = useRecoilState(selector_actualGame)
+  const [information, setInformation] = useRecoilState(atom_gameInformation)
   const gamesOptions = useRecoilValue(selector_gamesOptions)
 
-  const [isCheckTournament, setIsCheckTournament] = useState<boolean>(() => {
-    if (!ISSERVER) {
-      const informationTournament = localStorage.getItem(LocalKeys.user_information_tournament)
+  const [isCheckTournament, setIsCheckTournament] = useState<boolean>(false)
 
-      return !!informationTournament
+  const initialValues = useMemo<Values>(() => {
+    return {
+      [FIELDS.email]: '',
+      [FIELDS.secret_key]: ''
     }
-
-    return false
-  })
-
-  const initialValues = useMemo<Values>(() => ({
-    [FIELDS.email]: '',
-    [FIELDS.secret_key]: ''
-  }), [])
+  }, [isCheckTournament])
 
   const fields = useMemo<IField[]>(() => [
     {
@@ -71,6 +69,14 @@ export const Tournament: FC = () => {
 
   const [isSaveTournament, setIsSaveTournament] = useState<boolean>(false)
 
+  useEffect(() => {
+    if (information) {
+      handleCheckUser(information)
+    } else {
+      setIsCheckTournament(false)
+    }
+  }, [information])
+
   const handleOpen = () => {
     setOpen(true)
   }
@@ -83,14 +89,7 @@ export const Tournament: FC = () => {
     setActualGame(newValue)
   }
 
-  const handleSubmit = async (values: Values) => {
-    const body: Body = {
-      email: values.email,
-      secretKey: values.secret_key,
-      status: RoleUser.judge,
-      gameName: actualGame
-    }
-
+  const handleCheckUser = async (body: Body) => {
     try {
       const response = await instance({
         method: METHODS.POST,
@@ -105,9 +104,7 @@ export const Tournament: FC = () => {
           toastId: URL.check_role_user
         })
 
-        if (ISSERVER) {
-          localStorage.setItem(LocalKeys.user_information_tournament, JSON.stringify(body))
-        }
+        setInformation(body)
 
         setIsCheckTournament(true)
       }
@@ -116,12 +113,31 @@ export const Tournament: FC = () => {
         toast.error(error, {
           toastId: URL.check_role_user
         })
+
+        localStorage.removeItem(LocalKeys.user_information_tournament)
       }
     } catch (error) { }
   }
 
+  const handleSubmit = (values: Values) => {
+    const body: Body = {
+      email: values.email,
+      secretKey: values.secret_key,
+      status: RoleUser.judge,
+      gameName: actualGame
+    }
+
+    handleCheckUser(body)
+  }
+
   const getButtons = (props: FormikProps<Values>) => (
     <Button disabled={!props.isValid} type="submit" variant="contained">Проверить данные</Button>
+  )
+
+  const informationAboutUser = (
+    <div>
+
+    </div>
   )
 
   const iconCloseInformation = (
@@ -162,48 +178,65 @@ export const Tournament: FC = () => {
         className={cn(styles.container)}
       >
         {
-          open ? (
-            <div className={cn(styles.information, styles.container)}>
-              {iconCloseInformation}
-
-              <Formik
-                onSubmit={handleSubmit}
-                initialValues={initialValues}
-                validationSchema={schema}
-                validateOnChange
-              >
+          isCheckTournament ?
+            (
+              <div className={cn(styles.information, styles.container)}>
+                <Information />
+              </div>
+            )
+            :
+            (
+              <>
                 {
-                  (props: FormikProps<Values>) => (
-                    <Form
-                      fields={fields}
-                      title="Информация о турнире"
-                      buttonsElement={getButtons(props)}
-                    >
-                      <Select
-                        label="Игра"
-                        name="games"
-                        options={gamesOptions}
-                        value={actualGame}
-                        onChange={handleChangeGame}
-                      />
-                    </Form>
-                  )
-                }
-              </Formik>
+                  open ? (
+                    <div className={cn(styles.information, styles.container)}>
+                      {iconCloseInformation}
 
-              <Checkbox
-                label='Сохранить результаты турнира'
-                checked={isSaveTournament}
-                handleChecked={handleCheckedSaveTournament}
-              />
-            </div>
-          ) : iconOpenInformation
+                      <Formik
+                        onSubmit={handleSubmit}
+                        initialValues={initialValues}
+                        validationSchema={schema}
+                        validateOnChange
+                      >
+                        {
+                          (props: FormikProps<Values>) => (
+                            <Form
+                              disabled={isCheckTournament}
+                              fields={fields}
+                              title="Информация о турнире"
+                              buttonsElement={getButtons(props)}
+                            >
+                              <Select
+                                disabled={isCheckTournament}
+                                label="Игра"
+                                name="games"
+                                options={gamesOptions}
+                                value={actualGame}
+                                onChange={handleChangeGame}
+                              />
+                            </Form>
+                          )
+                        }
+                      </Formik>
+
+                      <Checkbox
+                        label='Сохранить результаты турнира'
+                        checked={isSaveTournament}
+                        handleChecked={handleCheckedSaveTournament}
+                      />
+                    </div>
+                  ) : iconOpenInformation
+                }
+              </>
+            )
         }
       </Box>
       <section className={cn(styles.bracket, styles.container, {
-        'full-width': !open
+        'full-width': !open || isCheckTournament
       })}>
-        Введите все данные для формирования турнирной сетки
+        {
+          isCheckTournament ? <Bracket /> : 'Введите все данные для формирования турнирной сетки'
+        }
       </section>
     </div>
   );

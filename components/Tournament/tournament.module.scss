@@ -15,9 +15,14 @@
 .information {
   display: flex;
   flex-direction: column;
-  // width: 30vw;
   gap: 10px;
-  border: 1px solid black
+
+  border: 1px solid black;
+  border-radius: 5px;
+
+  -webkit-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  -moz-box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
+  box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
 }
 
 .container {

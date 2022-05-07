@@ -10,7 +10,7 @@ import { Props } from './types'
 import styles from './form.module.scss';
 
 export const Form: FC<Props> = (props) => {
-  const { fields, title, buttonsElement, children } = props
+  const { fields, title, buttonsElement, children, disabled } = props
 
   return (
     <FormFormik className={styles.form}>
@@ -26,7 +26,15 @@ export const Form: FC<Props> = (props) => {
             <div key={name} className={styles.inputContainer}>
               <Field id={name} name={name} className={styles.inputField}>
                 {
-                  (props: FieldProps) => <FieldElement variant="outlined" label={title} type={type} placeholder={placeholder} {...props} />
+                  (props: FieldProps) =>
+                    <FieldElement
+                      disabled={disabled}
+                      variant="outlined"
+                      label={title}
+                      type={type}
+                      placeholder={placeholder}
+                      {...props}
+                    />
                 }
               </Field>
             </div>

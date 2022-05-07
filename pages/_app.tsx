@@ -17,11 +17,12 @@ import { themeMaterial } from 'const/styles';
 import { linksWithoutLayout } from 'const/links';
 
 import { AuthProvider } from 'context/auth.provider';
+import StartProvider from 'context/start.provider';
 
+import 'react-tabs/style/react-tabs.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'styles/globals.scss'
 import 'components/Error/error.sass';
-import StartProvider from 'context/start.provider';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter()

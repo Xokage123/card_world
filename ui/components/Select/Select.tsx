@@ -9,7 +9,14 @@ import styles from './select.module.scss';
 
 
 export const Select: FC<Props> = (props) => {
-  const { value, onChange, options, name, label} = props
+  const {
+    value,
+    onChange,
+    options,
+    name,
+    label,
+    disabled
+  } = props
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const value = event.target.value
@@ -22,6 +29,7 @@ export const Select: FC<Props> = (props) => {
       <FormControl fullWidth>
         <InputLabel id={name}>{label}</InputLabel>
         <MaterialSelect
+          disabled={disabled}
           labelId={name}
           value={value}
           label={label}

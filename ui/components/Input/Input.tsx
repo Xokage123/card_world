@@ -44,7 +44,7 @@ export const InputElement: FC<InputProps> = (props) => {
 }
 
 export const FieldElement: FC<FieldProps> = (props) => {
-  const { field, meta: { touched, error }, type, placeholder, label, variant } = props
+  const { field, meta: { touched, error }, type, placeholder, label, variant, disabled } = props
 
   const inputProps = {
     type,
@@ -54,7 +54,7 @@ export const FieldElement: FC<FieldProps> = (props) => {
 
   return (
     <Box>
-      <TextField fullWidth variant={variant} label={label} inputProps={inputProps} />
+      <TextField disabled={disabled} fullWidth variant={variant} label={label} inputProps={inputProps} />
       {touched && error && <Error text={error} />}
     </Box>
   );

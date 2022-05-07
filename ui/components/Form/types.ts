@@ -6,4 +6,5 @@ export interface Props {
   title: string;
   buttonsElement: JSX.Element;
   children?: ReactNode
+  disabled?: boolean
 }

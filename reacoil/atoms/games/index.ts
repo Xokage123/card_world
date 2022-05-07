@@ -1,5 +1,7 @@
 import { Game, GamesName } from "backend/models/Games";
+import { Body } from "pages/api/check_role_user";
 import { atom, selector, DefaultValue } from "recoil";
+import { Nullable } from "types/global";
 
 import { Option } from "ui/components/Select/types";
 
@@ -11,6 +13,11 @@ const atom_games = atom<Game[]>({
 const atom_game = atom<string>({
   key: 'atom_game',
   default: ''
+})
+
+const atom_gameInformation = atom<Nullable<Body>>({
+  key: 'atom_gameInformation',
+  default: null
 })
 
 const selector_gamesOptions = selector<Option[]>({
@@ -47,5 +54,6 @@ const selector_actualGame = selector<string>({
 export {
   atom_games,
   selector_gamesOptions,
-  selector_actualGame
+  selector_actualGame,
+  atom_gameInformation
 }
