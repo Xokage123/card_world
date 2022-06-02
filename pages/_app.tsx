@@ -6,7 +6,7 @@ import { ToastContainer } from 'react-toastify'
 import { RecoilRoot } from 'recoil'
 
 import instance from 'api';
-import { URL } from 'api/const';
+import { LocalKeys, StatusAuth, URL } from 'api/const';
 
 import { ThemeProvider } from '@mui/material/styles';
 
@@ -14,7 +14,7 @@ import { Layout } from 'components/Layout'
 import { MainContainer } from 'components/MainContainer';
 
 import { themeMaterial } from 'const/styles';
-import { linksWithoutLayout } from 'const/links';
+import { linksWithoutLayout, startPageLink } from 'const/links';
 
 import { AuthProvider } from 'context/auth.provider';
 import StartProvider from 'context/start.provider';
@@ -23,9 +23,21 @@ import 'react-tabs/style/react-tabs.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'styles/globals.scss'
 import 'components/Error/error.sass';
+import { getLocalStorageValue } from 'helpers/local_storage';
+import { useMount } from 'react-use';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter()
+
+  useMount(() => {
+    const authStatus = getLocalStorageValue<StatusAuth>(LocalKeys.status_auth)
+
+    if (authStatus && authStatus === StatusAuth.no_auth) {
+      router.push({
+        pathname: startPageLink
+      })
+    }
+  })
 
   useEffect(() => {
     instance({
@@ -45,7 +57,7 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
         <Component {...pageProps} />
       </Layout>
     ) : (
-      <MainContainer classes='height_100'>
+      <MainContainer>
         <Component {...pageProps} />
       </MainContainer>
     )

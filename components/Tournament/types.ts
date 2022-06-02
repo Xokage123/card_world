@@ -1,4 +1,4 @@
-import { FIELDS } from 'ui/components/Input/types'
+import { FIELDS } from 'ui/components/input/types'
 
 export interface Values {
   [FIELDS.email]: string;

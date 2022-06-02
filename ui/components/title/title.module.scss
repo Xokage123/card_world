@@ -1,0 +1,25 @@
+@import "ui/styles/variables";
+@import "ui/styles/mixins";
+
+.title {
+  margin: 0;
+  padding-bottom: 10px;
+
+  font-weight: $font-weight-bold;
+
+  &_3 {
+    @include font-size(22);
+  }
+
+  &_4 {
+    @include font-size(20);
+  }
+
+  &_5 {
+    @include font-size(18);
+  }
+
+  &_6 {
+     @include font-size(16);
+  }
+}

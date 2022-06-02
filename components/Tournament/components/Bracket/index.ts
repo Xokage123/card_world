@@ -1,1 +1,1 @@
-export * from './Bracket';
+export * from './bracket';

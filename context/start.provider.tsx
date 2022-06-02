@@ -1,5 +1,6 @@
 import { AxiosResponse } from 'axios';
-import { FC, useEffect, ReactNode, useCallback } from "react"
+import { FC, useEffect, ReactNode, useCallback } from "react";
+import { toast } from 'react-toastify';
 import { useSetRecoilState } from "recoil";
 
 import instance from 'api';
@@ -28,11 +29,17 @@ const StartProvider: FC<Props> = (props) => {
       url: URL.games
     })
       .then((response: AxiosResponse<Response<Game[]>>) => {
-        const { data } = response.data
+        const { data, error } = response.data
 
         if (data) {
           setGames(data)
           setActualGame(data[0].name)
+        }
+
+        if (error) {
+          toast.error(error, {
+            toastId: URL.games
+          })
         }
       })
   }, [setActualGame, setGames])

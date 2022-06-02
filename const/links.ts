@@ -4,6 +4,7 @@ export enum LINKS {
   news = '/news',
   cards = '/cards',
   tournament = '/tournament',
+  tournament_schedule = '/tournament_schedule',
   registration = '/registration',
   reset_password = '/reset_password',
 }
@@ -16,6 +17,7 @@ export const namesNavigateItem: ObjectString = {
   [LINKS.news]: 'Новости',
   [LINKS.tournament]: 'Турнир',
   [LINKS.cards]: 'База карт',
+  [LINKS.tournament_schedule]: 'Расписание турниров'
 }
 
 export const linksWithoutLayout: string[] = [

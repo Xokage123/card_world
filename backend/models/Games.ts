@@ -1,20 +1,26 @@
-import { Schema, model, models } from 'mongoose'
+import { Schema } from 'mongoose'
+
+import getSchema from 'backend/helpers/getSchema';
 
 export type Names = 'BerserkHeroes' | 'Keyforge'
+export type Modes = 'rating' | 'regular' | 'draft' | 'sealed'
 
 export interface Game {
   name: Names
-  modes: string[]
+  modes: Modes[]
 }
 
 export enum GamesName {
   BerserkHeroes = 'Берсерк.Герои',
-  Keyforge = 'Keyforge'
+  Keyforge = 'Keyforge' 
 }
 
-const name = 'Games'
-
-let GamesSchema: any;
+export enum GamesMode {
+  rating = 'Рейтенговый турнир',
+  regular = 'Обычный турнир',
+  draft = 'Драфт',
+  sealed = 'Силед'
+}
 
 const schema = new Schema<Game>({
   name: {
@@ -30,6 +36,4 @@ const schema = new Schema<Game>({
 
 })
 
-GamesSchema = models?.[name] ? model(name) : model(name, schema);
-
-export default GamesSchema
+export default getSchema('Games', schema)

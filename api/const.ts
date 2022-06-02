@@ -11,7 +11,15 @@ export const errorsText = {
 
 export enum LocalKeys {
   user_token = 'user_token',
-  user_information_tournament = 'user_information_tournament'
+  user_information_tournament = 'user_information_tournament',
+  is_regular_tournament = 'is_regular_tournament',
+  tournament_players = 'tournament_players',
+  status_auth = 'status_auth'
+}
+
+export enum StatusAuth {
+  no_auth = 'no_auth',
+  token_auth = 'token_auth'
 }
 
 export const URL = {
@@ -20,7 +28,8 @@ export const URL = {
   email: '/email',
   auth: '/auth',
   db_connect: '/db_connect',
-  check_role_user: '/check_role_user'
+  check_role_user: '/check_role_user',
+  tournament: '/tournament',
 }
 
 export enum METHODS {

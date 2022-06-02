@@ -1,6 +1,7 @@
 import dynamic from 'next/dynamic'
 import { FC, useState, useMemo, useEffect } from 'react';
 import { toast } from 'react-toastify'
+import { useMount } from 'react-use'
 import cn from 'classnames'
 import { Formik, FormikProps } from 'formik';
 import { useRecoilState, useRecoilValue } from 'recoil'
@@ -10,8 +11,11 @@ import { URL, METHODS, LocalKeys } from 'api/const'
 import { Response } from 'api/types'
 
 import { RoleUser } from 'backend/models/User'
+import { Modes, Names } from 'backend/models/Games';
 
-const Bracket = dynamic(() => import('./components/Bracket/Bracket'))
+import { removeLocalStorageValue } from 'helpers/local_storage'
+
+const Bracket = dynamic(() => import('./components/Bracket/bracket'))
 const Information = dynamic(() => import('./components/Information/Information'))
 
 import { Body } from 'pages/api/check_role_user'
@@ -19,31 +23,85 @@ import { Body } from 'pages/api/check_role_user'
 import { Values } from './types'
 import { schema } from './schema'
 
-import { Select } from 'ui/components/Select';
-import { Form } from 'ui/components/Form';
-import { Checkbox } from 'ui/components/Checkbox';
-import { FIELDS, IField } from 'ui/components/Input/types'
+import { Select } from 'ui/components/select';
+import { Form } from 'ui/components/form';
+import { Checkbox } from 'ui/components/checkbox';
+import { FIELDS, IField } from 'ui/components/input/types'
+import { InputElement } from 'ui/components/input';
 
 import { IconButton, Box, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
+import { Nullable } from 'types/global';
+
 import {
   selector_gamesOptions,
   selector_actualGame,
-  atom_gameInformation
+  selector_isRegularTournament,
+  selector_modesOptions
 } from 'reacoil/atoms/games';
+import { selector_tournamentInformation } from 'reacoil/atoms/tournament';
 
 import styles from './tournament.module.scss';
+import { TournamentInformation } from 'reacoil/atoms/tournament/types';
 
 export const Tournament: FC = () => {
-  const [open, setOpen] = useState<boolean>(true)
+  const [open, setOpen] = useState(true);
+  const [isValidateUser, setIsValidateUser] = useState(false);
+  const [price, setPrice] = useState('0')
 
   const [actualGame, setActualGame] = useRecoilState(selector_actualGame)
-  const [information, setInformation] = useRecoilState(atom_gameInformation)
+  const [information, setInformation] = useRecoilState(selector_tournamentInformation)
+
+  const [isRegularMode, setIsRegularMode] = useRecoilState(selector_isRegularTournament)
+
   const gamesOptions = useRecoilValue(selector_gamesOptions)
+  const modesOptions = useRecoilValue(selector_modesOptions)
 
   const [isCheckTournament, setIsCheckTournament] = useState<boolean>(false)
+  const [mode, setMode] = useState<Nullable<Modes>>(null)
+  const [isShowFormCheckUser, setIsShowFormCheckUser] = useState<boolean>(false)
+  const [isSaveTournament, setIsSaveTournament] = useState<boolean>(false)
+
+  useMount(() => {
+    if (isRegularMode) {
+      setIsCheckTournament(true)
+    }
+  })
+
+  useEffect(() => {
+    const noInformation = !information && !isRegularMode
+
+    if (noInformation) {
+      setIsCheckTournament(false)
+    }
+  }, [information, isRegularMode])
+
+  useEffect(() => {
+    if (isRegularMode) {
+      setActualGame(isRegularMode)
+      setMode('regular')
+      setIsCheckTournament(true)
+
+      return;
+    }
+
+    if (information) {
+      setActualGame(information.game)
+      setMode(information.mode)
+      setIsCheckTournament(true)
+
+      return;
+    }
+
+    setMode(modesOptions.length ? modesOptions[0].value : null)
+  }, [modesOptions, isRegularMode])
+  useEffect(() => {
+    if (mode) {
+      setIsShowFormCheckUser(mode !== 'regular')
+    }
+  }, [mode])
 
   const initialValues = useMemo<Values>(() => {
     return {
@@ -67,16 +125,6 @@ export const Tournament: FC = () => {
     },
   ], [])
 
-  const [isSaveTournament, setIsSaveTournament] = useState<boolean>(false)
-
-  useEffect(() => {
-    if (information) {
-      handleCheckUser(information)
-    } else {
-      setIsCheckTournament(false)
-    }
-  }, [information])
-
   const handleOpen = () => {
     setOpen(true)
   }
@@ -85,8 +133,12 @@ export const Tournament: FC = () => {
     setOpen(false)
   }
 
-  const handleChangeGame = (newValue: string) => {
+  const handleChangeGame = (newValue: Names) => {
     setActualGame(newValue)
+  }
+
+  const handleChangeMode = (newValue: Modes) => {
+    setMode(newValue)
   }
 
   const handleCheckUser = async (body: Body) => {
@@ -104,7 +156,17 @@ export const Tournament: FC = () => {
           toastId: URL.check_role_user
         })
 
-        setInformation(body)
+        const { gameName, gameMode, status, email } = body
+
+        const information: TournamentInformation = {
+          email,
+          status,
+          game: gameName,
+          mode: gameMode,
+          price
+        }
+
+        setInformation(information)
 
         setIsCheckTournament(true)
       }
@@ -114,31 +176,68 @@ export const Tournament: FC = () => {
           toastId: URL.check_role_user
         })
 
-        localStorage.removeItem(LocalKeys.user_information_tournament)
+        removeLocalStorageValue(LocalKeys.user_information_tournament)
       }
     } catch (error) { }
   }
 
   const handleSubmit = (values: Values) => {
-    const body: Body = {
-      email: values.email,
-      secretKey: values.secret_key,
-      status: RoleUser.judge,
-      gameName: actualGame
-    }
+    if (actualGame && mode) {
+      const body: Body = {
+        email: values.email,
+        secretKey: values.secret_key,
+        status: RoleUser.judge,
+        gameName: actualGame,
+        gameMode: mode,
+      }
 
-    handleCheckUser(body)
+      handleCheckUser(body)
+    }
+  }
+
+  const handleStartRegularTournament = () => {
+    if (actualGame && mode) {
+      setInformation({
+        game: actualGame,
+        mode,
+        price
+      })
+
+      setIsRegularMode(actualGame)
+    }
   }
 
   const getButtons = (props: FormikProps<Values>) => (
-    <Button disabled={!props.isValid} type="submit" variant="contained">Проверить данные</Button>
+    <>
+      <Button disabled={!props.isValid} type="submit" variant="contained">Проверить данные</Button>
+      <Button disabled={!props.isValid || !isValidateUser} type="submit" variant="contained">Начать турнир</Button>
+    </>
   )
 
-  const informationAboutUser = (
-    <div>
-
-    </div>
+  const getCheckboxes = () => (
+    <Checkbox
+      label='Сохранить результаты турнира'
+      checked={isSaveTournament}
+      handleChecked={handleCheckedSaveTournament}
+    />
   )
+
+  const getPriceInput = () => {
+    const onChange = (newValue: string) => {
+      setPrice(newValue)
+    }
+
+    return (
+      <InputElement
+        value={price}
+        onChange={onChange}
+        label='ssdsd'
+        type='number'
+        placeholder='Введите стоимость турнира'
+        variant='outlined'
+      />
+    )
+  }
 
   const iconCloseInformation = (
     <IconButton
@@ -172,13 +271,15 @@ export const Tournament: FC = () => {
     setIsSaveTournament(newValue)
   }
 
+  const isShowInformation = useMemo(() => !!(isCheckTournament && mode), [mode, isCheckTournament])
+
   return (
     <div className={styles.wrapper}>
-      <Box
+      <section
         className={cn(styles.container)}
       >
         {
-          isCheckTournament ?
+          isShowInformation ?
             (
               <div className={cn(styles.information, styles.container)}>
                 <Information />
@@ -192,52 +293,66 @@ export const Tournament: FC = () => {
                     <div className={cn(styles.information, styles.container)}>
                       {iconCloseInformation}
 
-                      <Formik
-                        onSubmit={handleSubmit}
-                        initialValues={initialValues}
-                        validationSchema={schema}
-                        validateOnChange
-                      >
-                        {
-                          (props: FormikProps<Values>) => (
-                            <Form
+                      {
+                        (mode && actualGame) && (
+                          <>
+                            <Select
                               disabled={isCheckTournament}
-                              fields={fields}
-                              title="Информация о турнире"
-                              buttonsElement={getButtons(props)}
-                            >
-                              <Select
-                                disabled={isCheckTournament}
-                                label="Игра"
-                                name="games"
-                                options={gamesOptions}
-                                value={actualGame}
-                                onChange={handleChangeGame}
-                              />
-                            </Form>
-                          )
-                        }
-                      </Formik>
+                              label="Игра"
+                              name="games"
+                              options={gamesOptions}
+                              value={actualGame}
+                              onChange={handleChangeGame}
+                            />
+                            <Select
+                              disabled={isCheckTournament}
+                              label="Режимы"
+                              name="modes"
+                              options={modesOptions}
+                              value={mode}
+                              onChange={handleChangeMode}
+                            />
+                          </>
+                        )
+                      }
 
-                      <Checkbox
-                        label='Сохранить результаты турнира'
-                        checked={isSaveTournament}
-                        handleChecked={handleCheckedSaveTournament}
-                      />
+                      {getPriceInput()}
+
+                      {
+                        isShowFormCheckUser ?
+                          (
+                            <Formik
+                              onSubmit={handleSubmit}
+                              initialValues={initialValues}
+                              validationSchema={schema}
+                              validateOnChange
+                            >
+                              {
+                                (props: FormikProps<Values>) => (
+                                  <Form
+                                    disabled={isCheckTournament}
+                                    fields={fields}
+                                    title="Организатор"
+                                    buttonsElement={getButtons(props)}
+                                    checkboxesElement={getCheckboxes()}
+                                  />
+                                )
+                              }
+                            </Formik>
+                          )
+                          :
+                          (
+                            <Button variant="contained" onClick={handleStartRegularTournament}>Начать турнир</Button>
+                          )
+                      }
                     </div>
                   ) : iconOpenInformation
                 }
               </>
             )
         }
-      </Box>
-      <section className={cn(styles.bracket, styles.container, {
-        'full-width': !open || isCheckTournament
-      })}>
-        {
-          isCheckTournament ? <Bracket /> : 'Введите все данные для формирования турнирной сетки'
-        }
       </section>
+      {isCheckTournament && <Bracket />}
     </div>
   );
 }

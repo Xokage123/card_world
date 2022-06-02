@@ -1,6 +1,6 @@
 import { ChangeEvent, FC } from 'react';
 
-import { Box, Typography, TextField, SxProps } from '@mui/material';
+import { Typography, TextField, SxProps } from '@mui/material';
 import { red } from '@mui/material/colors';
 
 import { InputProps, FieldProps, ErrorProps } from './types';
@@ -36,10 +36,10 @@ export const InputElement: FC<InputProps> = (props) => {
   }
 
   return (
-    <Box>
+    <div>
       <TextField fullWidth variant={variant} label={label} inputProps={inputProps} />
       {error && <Error text={error} />}
-    </Box>
+    </div>
   );
 }
 
@@ -53,10 +53,10 @@ export const FieldElement: FC<FieldProps> = (props) => {
   }
 
   return (
-    <Box>
+    <div>
       <TextField disabled={disabled} fullWidth variant={variant} label={label} inputProps={inputProps} />
       {touched && error && <Error text={error} />}
-    </Box>
+    </div>
   );
 }
 

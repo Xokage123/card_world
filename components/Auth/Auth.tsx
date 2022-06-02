@@ -1,4 +1,3 @@
-import { AxiosError, AxiosResponse } from 'axios';
 import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
 import { toast } from 'react-toastify';
@@ -7,29 +6,34 @@ import { useSetRecoilState } from 'recoil'
 
 import { Button } from '@mui/material';
 
-import { LINKS } from 'const/links';
+import { setLocalStorageValue } from 'helpers/local_storage';
 
-import { atom_statusAuth } from 'reacoil/atoms/auth'
+import { LINKS, startPageLink } from 'const/links';
 
-import { Data as DataAuth } from 'pages/api/auth'
+import {
+  atom_userInformation
+} from 'reacoil/atoms/user';
 
-import instance from 'api';
-import {  METHODS, LocalKeys } from 'api/const';
-import { Response } from 'api/types';
+import { LocalKeys, StatusAuth } from 'api/const';
+
+import {
+  fetch_postAuth,
+  fetch_getUserInformation
+} from 'api/points'
 
 import { schema } from './schema';
 
 import { Values } from './types';
 
-import { FIELDS, IField } from 'ui/components/Input/types'
-import { Form } from 'ui/components/Form'
+import { FIELDS, IField } from 'ui/components/input/types'
+import { Form } from 'ui/components/form'
 
 import styles from './auth.module.scss';
 
 export const AuthContent: FC = () => {
   const router = useRouter()
 
-  const setStatusAuth = useSetRecoilState(atom_statusAuth);
+  const setUserInformation = useSetRecoilState(atom_userInformation);
 
   const initialValues = useMemo<Values>(() => ({
     email: '',
@@ -51,41 +55,41 @@ export const AuthContent: FC = () => {
     },
   ], [])
 
-  const handleSubmit = (values: Values) => {
-    instance({
-      url: LINKS.auth,
-      method: METHODS.POST,
-      data: values
-    })
-      .then((response: AxiosResponse<Response<DataAuth>>) => {
-        const { data, error } = response.data
-        if (data) {
+  const handleSubmit = async (values: Values) => {
+    try {
+      fetch_postAuth({
+        data: values,
+        successСallback: async (data) => {
+          const { email } = values
           const { token } = data
 
-          toast.success('Вы успешно авторизировались!', {
-            toastId: LINKS.auth
-          })
+          setLocalStorageValue(LocalKeys.user_token, token)
 
-          setStatusAuth(true)
+          fetch_getUserInformation({
+            params: {
+              email
+            },
+            successСallback: (data) => {
+              toast.success('Вы успешно авторизировались!', {
+                toastId: LINKS.auth
+              })
 
-          localStorage.setItem(LocalKeys.user_token, token)
+              setLocalStorageValue(LocalKeys.status_auth, StatusAuth.token_auth)
 
-          router.push({
-            pathname: LINKS.news
-          })
-        }
+              setUserInformation(data)
 
-        if (error) {
-          toast.error(error, {
-            toastId: LINKS.auth
+              router.push({
+                pathname: startPageLink
+              })
+            }
           })
         }
       })
-      .catch((error: AxiosError) => {
-        toast.error(error.message, {
-          toastId: LINKS.auth
-        })
+    } catch (error: any) {
+      toast.error(error.message, {
+        toastId: LINKS.auth
       })
+    }
   }
 
   const handleRegistration = () => {
@@ -100,6 +104,14 @@ export const AuthContent: FC = () => {
     // })
   }
 
+  const handleNoAuth = () => {
+    setLocalStorageValue(LocalKeys.status_auth, StatusAuth.no_auth)
+
+    router.push({
+      pathname: startPageLink
+    })
+  }
+
   const getButtons = (props: FormikProps<Values>) => (
     <>
       <Button disabled className={styles.button} variant="outlined" onClick={handleRegistration}>Регистрация</Button>
@@ -111,6 +123,8 @@ export const AuthContent: FC = () => {
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
+        <Button className={styles.button} variant="outlined" onClick={handleNoAuth}>Продолжить без авторизации</Button>
+
         <Formik
           onSubmit={handleSubmit}
           initialValues={initialValues}

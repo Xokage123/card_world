@@ -1,8 +1,8 @@
 import * as Yup from 'yup';
 
-import { emailSchema, passwordSchema, requiredSchema } from 'const/schema';
+import { emailSchema, requiredSchema } from 'const/schema';
 
-import {FIELDS} from 'ui/components/Input/types'
+import {FIELDS} from 'ui/components/input/types'
 
 export const schema = Yup.object().shape({
   [FIELDS.email]: emailSchema,

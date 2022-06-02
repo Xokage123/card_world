@@ -8,7 +8,7 @@ import { schema } from './schema';
 
 import { FIELDS, IField, Values } from './types';
 
-import { FieldElement } from 'ui/components/Input'
+import { FieldElement } from 'ui/components/input'
 
 import styles from './registration.module.scss';
 import instance from 'api';

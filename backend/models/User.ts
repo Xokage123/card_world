@@ -1,4 +1,6 @@
-import { Schema, model, models } from 'mongoose'
+import { Schema } from 'mongoose'
+
+import getSchema from 'backend/helpers/getSchema';
 
 export enum RoleUser {
   user = 'user',
@@ -28,9 +30,14 @@ export interface User {
   role: Role[]
 }
 
-const name = 'User'
-
-let UserSchema: any;
+export interface UserPublic {
+  email: string,
+  initials: {
+    name: string,
+    surname: string,
+    patronymic?: string
+  }
+}
 
 const schema = new Schema<User>({
   email: {
@@ -67,6 +74,4 @@ const schema = new Schema<User>({
   }]
 })
 
-UserSchema = models?.[name] ? model(name) : model(name, schema);
-
-export default UserSchema
+export default getSchema('User', schema)

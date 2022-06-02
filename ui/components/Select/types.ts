@@ -1,14 +1,14 @@
-export interface Props {
+export interface Props<T> {
   label: string;
   isValid?: boolean;
   disabled?: boolean;
   name: string;
-  options: Option[];
+  options: Option<T>[];
   value: string;
-  onChange: (value: string) => void;
+  onChange: (value: any) => void;
 }
 
-export interface Option {
-  value: string;
+export interface Option<T> {
+  value: T;
   label: string;
 }

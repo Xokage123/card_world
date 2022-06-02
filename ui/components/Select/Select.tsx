@@ -1,14 +1,19 @@
 import { FC } from 'react';
 
-import { Box, InputLabel, MenuItem, FormControl, Select as MaterialSelect, SelectChangeEvent, SxProps } from '@mui/material';
-import { red } from '@mui/material/colors';
+import {
+  Box,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select as MaterialSelect,
+  SelectChangeEvent
+} from '@mui/material';
 
 import { Props } from './types'
 
 import styles from './select.module.scss';
 
-
-export const Select: FC<Props> = (props) => {
+export const Select: FC<Props<string>> = (props) => {
   const {
     value,
     onChange,

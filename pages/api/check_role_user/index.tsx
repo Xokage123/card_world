@@ -3,18 +3,21 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import config from 'config'
 
 import User, { RoleUser, User as IUser} from 'backend/models/User'
+import { Modes, Names } from 'backend/models/Games';
 
 import { Response } from 'api/types'
 import { METHODS, SUCCESS_TEXT } from 'api/const'
 import { getInitialResponseData, checkMethodRequest, returnAxiosError } from 'helpers/api'
+import { Nullable } from 'types/global';
 
 export type Data = string
 
 export interface Body {
-  gameName: string;
+  gameName: Names;
   status: RoleUser;
   secretKey: string;
   email: string;
+  gameMode: Modes;
 }
 
 const handler = async (
@@ -42,7 +45,7 @@ const handler = async (
   try {
     const { gameName, status, email, secretKey }: Body = request.body
 
-    const user: IUser = await User.findOne({
+    const user: Nullable<IUser> = await User.findOne({
       email
     })
 

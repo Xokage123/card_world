@@ -2,24 +2,30 @@ import { useRouter } from "next/router"
 import { createContext, FC, ReactNode, useEffect } from "react"
 import { useRecoilValue, useSetRecoilState } from 'recoil'
 
-import { atom_statusAuth } from 'reacoil/atoms/auth'
+import {
+  atom_userInformation
+} from 'reacoil/atoms/user'
+
+import { UserPublic } from 'backend/models/User'
 
 import { LINKS, startPageLink } from "const/links"
+
+import { Nullable } from "types/global"
+import { getLocalStorageValue } from "helpers/local_storage"
+import { LocalKeys } from "api/const"
 
 interface Props {
   children: ReactNode
 }
 
-export const authContext = createContext(false)
+export const authContext = createContext<Nullable<UserPublic>>(null)
 
 export const AuthProvider: FC<Props> = (props) => {
   const { children } = props
 
   const router = useRouter()
 
-  const setStatusAuth = useSetRecoilState(atom_statusAuth);
-
-  const statusAuth = useRecoilValue(atom_statusAuth)
+  const userInformation = useRecoilValue(atom_userInformation)
 
   const forbiddenLinks: string[]  = [
     LINKS.registration,
@@ -28,23 +34,25 @@ export const AuthProvider: FC<Props> = (props) => {
   ]
 
   useEffect(() => {
-    if (statusAuth) {
+    if (userInformation) {
       if (router.pathname === LINKS.home) {
         router.push({
           pathname: startPageLink
         })
       }
     } else if (!forbiddenLinks.includes(router.pathname)) {
-      router.push({
-        pathname: LINKS.auth
-      })
+      if (!getLocalStorageValue(LocalKeys.status_auth)) {
+        router.push({
+          pathname: LINKS.auth
+        })
+      }
     }
-  }, [statusAuth])
+  }, [userInformation])
 
   if (router.pathname === LINKS.home) return null
 
   return (
-    <authContext.Provider value={statusAuth}>
+    <authContext.Provider value={userInformation}>
       {children}
     </authContext.Provider>
   )

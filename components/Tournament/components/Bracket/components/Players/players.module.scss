@@ -1,0 +1,11 @@
+.buttons {
+  display: flex;
+  justify-content: space-between;
+  padding: 10px 0;
+}
+
+.button {
+  &_start {
+    margin-left: auto;
+  }
+}

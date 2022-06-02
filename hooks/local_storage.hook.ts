@@ -1,15 +1,16 @@
 import { useState } from "react";
-import { useRecoilValue } from 'recoil';
+import { useRecoilValue, RecoilState, useSetRecoilState } from 'recoil';
 
 import { LocalKeys } from 'api/const';
 
 import { atom_isServer } from 'reacoil/atoms/environment';
 import { Nullable } from "types/global";
 
-const useLocalStorage = <T>(key: LocalKeys) => {
+const useLocalStorage = <T>(key: LocalKeys, atom: RecoilState<Nullable<T>>) => {
   const isServer = useRecoilValue(atom_isServer)
-  // State to store our value
-  // Pass initial state function to useState so logic is only executed once
+
+  const setAtomValue = useSetRecoilState(atom)
+
   const [storedValue, setStoredValue] = useState<Nullable<T>>(() => {
     if (isServer) return null;
 
@@ -23,6 +24,9 @@ const useLocalStorage = <T>(key: LocalKeys) => {
   });
 
   const resetValue = () => {
+    setStoredValue(null);
+    setAtomValue(null);
+
     if (!isServer) {
       window.localStorage.removeItem(key);
     }
@@ -31,9 +35,10 @@ const useLocalStorage = <T>(key: LocalKeys) => {
   const setValue = (value: T) => {
     try {
       setStoredValue(value);
+      setAtomValue(value);
 
       if (!isServer) {
-        window.localStorage.setItem(key, JSON.stringify(value));
+        window.localStorage.setItem(key, value ? JSON.stringify(value) : '');
       }
     } catch (error) {
       console.log(error);

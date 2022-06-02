@@ -1,10 +1,26 @@
+import { AxiosError, AxiosResponse, AxiosRequestConfig } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next'
+import { toast } from 'react-toastify';
 
-import { Response } from 'api/types'
+import { Response, PointProps } from 'api/types'
 
 import { Nullable } from "types/global"
 
-import { AxiosError, AxiosPromise } from "axios"
+export const checkCallbacks = <P, A>(response: AxiosResponse<Response<A>>, props: PointProps<P, A>) => {
+  const { successСallback, errorСallback } = props
+
+  const { data, error } = response.data
+
+
+  if (successСallback && data) {
+    successСallback(data)
+  }
+
+  if (error) {
+    toast.error(error)
+    errorСallback && errorСallback(error)
+  }
+}
 
 export interface ResponseConfig<T> {
   code: number

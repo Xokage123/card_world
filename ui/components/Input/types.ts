@@ -23,6 +23,13 @@ export interface ErrorProps {
 
 export enum FIELDS {
   email = 'email',
+  name = 'name',
+  surname = 'surname',
+  patronymic = 'patronymic ',
+  initials = 'initials',
+  nickname = 'nickname',
+  payment = 'payment',
+  points = 'points',
   password = 'password',
   secret_key = 'secret_key'
 }
@@ -31,5 +38,6 @@ export interface IField {
   title: string;
   name: FIELDS;
   type: InputType;
-  placeholder: string
+  placeholder: string;
+  required?: boolean;
 }

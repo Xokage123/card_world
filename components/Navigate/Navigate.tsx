@@ -1,22 +1,45 @@
 import { FC } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router'
+import { useRecoilValue } from 'recoil';
 import cn from 'classnames'
 
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
+import {
+  AppBar,
+  Box,
+  Toolbar,
+  Typography,
+  Button,
+  IconButton,
+  List,
+  ListItem,
+  ListItemText
+} from '@mui/material';
 
-import styles from './navigate.module.scss';
+import MenuIcon from '@mui/icons-material/Menu';
+
+import { LINKS } from 'const/links';
+
+import { atom_userInformation } from 'reacoil/atoms/user';
+
 import { navigateItems } from 'const/links';
 
+import styles from './navigate.module.scss';
+import { LocalKeys } from 'api/const';
+import { removeLocalStorageValue } from 'helpers/local_storage';
+
 export const Navigate: FC = () => {
+  const userInfirmation = useRecoilValue(atom_userInformation)
+
   const router = useRouter()
+
+  const handleAuth = () => {
+    removeLocalStorageValue(LocalKeys.status_auth)
+    
+    router.push({
+      pathname: LINKS.auth
+    })
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>
@@ -31,9 +54,11 @@ export const Navigate: FC = () => {
           >
             <MenuIcon />
           </IconButton>
-          <List classes={{
-            root: styles.list
-          }}>
+          <List
+            classes={{
+              root: styles.list
+            }}
+          >
             {
               navigateItems.map(item => {
                 const { url, name } = item
@@ -50,6 +75,17 @@ export const Navigate: FC = () => {
               })
             }
           </List>
+
+          {
+            userInfirmation ?
+              (
+                <Typography variant='body1'>Вы аторизированы</Typography>
+              )
+              :
+              (
+                <Button onClick={handleAuth} variant='contained'>Авторизироваться</Button>
+              )
+          }
         </Toolbar>
       </AppBar>
     </Box>

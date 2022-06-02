@@ -5,9 +5,4 @@ const atom_statusAuth = atom({
   default: true
 })
 
-const atom_userSchema = atom({
-  key: 'atom_userSchema',
-  default: false
-})
-
-export { atom_statusAuth, atom_userSchema }
+export { atom_statusAuth }
