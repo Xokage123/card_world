@@ -18,7 +18,7 @@ const getLocalStorageValue = <T>(key: LocalKeys): Nullable<T> => {
   return null
 }
 
-export const getLocalStorageArray = <T>(key: LocalKeys): T[] => {
+const getLocalStorageArray = <T>(key: LocalKeys): T[] => {
   if (isWindow) {
     const valueJSON = localStorage.getItem(key)
 
@@ -50,6 +50,7 @@ const removeLocalStorageValue = <T>(key: LocalKeys): void => {
 
 export {
   getLocalStorageValue,
+  getLocalStorageArray,
   setLocalStorageValue,
   removeLocalStorageValue
 }

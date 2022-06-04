@@ -1,0 +1,13 @@
+@import 'ui/styles/variables';
+
+.title {
+  &Container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  &Status {
+    animation: $animate-blink;
+  }
+}

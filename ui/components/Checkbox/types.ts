@@ -1,5 +1,5 @@
 export interface Props {
-  label: string
+  label?: string
   checked: boolean
   handleChecked: (newValue: boolean) => void
 }

@@ -1,6 +1,8 @@
 import { Modes, Names } from "backend/models/Games";
 import { RoleUser } from "backend/models/User";
 
+import { Theme } from "const/theme";
+
 export interface Player {
   id: string;
   name: string;
@@ -19,4 +21,17 @@ export interface TournamentInformation {
   email?: string;
   secretKey?: string;
   status?: RoleUser;
+}
+
+export enum Status {
+  preparation = 'preparation',
+  main = 'main',
+  completed = 'completed '
+}
+
+export type StatusTournament = {
+  [k in Status]: {
+    text: string;
+    theme: Theme;
+  };
 }

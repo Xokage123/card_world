@@ -4,7 +4,11 @@ import { toast } from 'react-toastify'
 import { useMount } from 'react-use'
 import cn from 'classnames'
 import { Formik, FormikProps } from 'formik';
-import { useRecoilState, useRecoilValue } from 'recoil'
+import {
+  useRecoilState,
+  useRecoilValue,
+  useSetRecoilState
+} from 'recoil'
 
 import instance from 'api'
 import { URL, METHODS, LocalKeys } from 'api/const'
@@ -29,7 +33,7 @@ import { Checkbox } from 'ui/components/checkbox';
 import { FIELDS, IField } from 'ui/components/input/types'
 import { InputElement } from 'ui/components/input';
 
-import { IconButton, Box, Button } from '@mui/material';
+import { IconButton, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 
@@ -41,20 +45,27 @@ import {
   selector_isRegularTournament,
   selector_modesOptions
 } from 'reacoil/atoms/games';
-import { selector_tournamentInformation } from 'reacoil/atoms/tournament';
+import {
+  selector_tournamentInformation,
+  selector_isTournamentStart
+} from 'reacoil/atoms/tournament';
+import {
+  TournamentInformation
+} from 'reacoil/atoms/tournament/types';
 
 import styles from './tournament.module.scss';
-import { TournamentInformation } from 'reacoil/atoms/tournament/types';
 
 export const Tournament: FC = () => {
   const [open, setOpen] = useState(true);
   const [isValidateUser, setIsValidateUser] = useState(false);
   const [price, setPrice] = useState('0')
 
-  const [actualGame, setActualGame] = useRecoilState(selector_actualGame)
-  const [information, setInformation] = useRecoilState(selector_tournamentInformation)
+  const [actualGame, setActualGame] = useRecoilState(selector_actualGame);
+  const [information, setInformation] = useRecoilState(selector_tournamentInformation);
 
-  const [isRegularMode, setIsRegularMode] = useRecoilState(selector_isRegularTournament)
+  const setIsTournamentStart = useSetRecoilState(selector_isTournamentStart);
+
+  const [isRegularMode, setIsRegularMode] = useRecoilState(selector_isRegularTournament);
 
   const gamesOptions = useRecoilValue(selector_gamesOptions)
   const modesOptions = useRecoilValue(selector_modesOptions)
@@ -203,6 +214,8 @@ export const Tournament: FC = () => {
         price
       })
 
+      setIsTournamentStart(true)
+
       setIsRegularMode(actualGame)
     }
   }
@@ -231,7 +244,7 @@ export const Tournament: FC = () => {
       <InputElement
         value={price}
         onChange={onChange}
-        label='ssdsd'
+        label='Цена в ₽'
         type='number'
         placeholder='Введите стоимость турнира'
         variant='outlined'
@@ -306,7 +319,7 @@ export const Tournament: FC = () => {
                             />
                             <Select
                               disabled={isCheckTournament}
-                              label="Режимы"
+                              label="Режим"
                               name="modes"
                               options={modesOptions}
                               value={mode}

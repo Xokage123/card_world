@@ -8,13 +8,15 @@ import useModal from "hooks/modal.hook";
 
 import { Button } from "@mui/material";
 
-import { NotificationProps, NotificationTheme } from "./type";
+import { NotificationProps } from "./type";
+
+import { Theme } from "const/theme";
 
 import styles from './notification.module.scss';
 
 export const Notification: FC<NotificationProps> = (props) => {
   const {
-    theme = NotificationTheme.information,
+    theme = Theme.information,
     name,
     title = 'Подтвердите действие',
     text,
@@ -45,7 +47,7 @@ export const Notification: FC<NotificationProps> = (props) => {
   return (
     <Modal isNotification name={name}>
       <div className={styles.container}>
-        <div className={cn(`notification-${theme}`, styles.top)}>
+        <div className={cn(`theme-background--${theme}`, styles.top)}>
           <H3 className={styles.title}>{title}</H3>
         </div>
 

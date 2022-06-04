@@ -1,9 +1,21 @@
+import {
+  atom,
+  selector,
+  DefaultValue
+} from "recoil";
+
 import { LocalKeys } from "api/const";
-import { getLocalStorageArray, getLocalStorageValue, setLocalStorageValue } from "helpers/local_storage";
-import { atom, selector, DefaultValue } from "recoil";
+
+import {
+  getLocalStorageArray,
+  getLocalStorageValue,
+  setLocalStorageValue,
+  removeLocalStorageValue
+} from "helpers/local_storage";
+
 import { Nullable } from "types/global";
 
-import { Player, TournamentInformation } from "./types";
+import { Player, Status, TournamentInformation } from "./types";
 
 const atom_players = atom<Player[]>({
   key: 'atom_players',
@@ -71,8 +83,72 @@ const selector_tournamentInformation = selector<Nullable<TournamentInformation>>
   }
 })
 
+const atom_isTournamentStart = atom<Nullable<boolean>>({
+  key: 'atom_isTournamentStart',
+  default: getLocalStorageValue<boolean>(LocalKeys.isTournamentStar)
+})
+const selector_isTournamentStart = selector<Nullable<boolean>>({
+  key: 'selector_isTournamentStart',
+  get: ({ get }) => {
+
+    return get(atom_isTournamentStart);
+  },
+  set: ({
+    set
+  }, newValue) => {
+    setLocalStorageValue(LocalKeys.isTournamentStar, newValue)
+
+    if (!newValue) {
+      set(
+        atom_statusTournament,
+        null
+      )
+      removeLocalStorageValue(LocalKeys.tournament_status)
+    } else {
+      const status = getLocalStorageValue<Status>(LocalKeys.tournament_status)
+
+      if (!status) {
+        setLocalStorageValue(LocalKeys.tournament_status, Status.preparation)
+      }
+
+      set(
+        atom_statusTournament,
+        status ? status : Status.preparation
+      )
+    }
+
+    set(
+      atom_isTournamentStart,
+      newValue instanceof DefaultValue ? getLocalStorageValue<boolean>(LocalKeys.isTournamentStar) : newValue
+    )
+  }
+})
+
+const atom_statusTournament = atom<Nullable<Status>>({
+  key: 'atom_statusTournament',
+  default: getLocalStorageValue<Status>(LocalKeys.tournament_status)
+})
+const selector_statusTournament = selector<Nullable<Status>>({
+  key: 'selector_statusTournament',
+  get: ({ get }) => {
+    return get(atom_statusTournament)
+  },
+  set: ({
+    set
+  },newValue) => {
+    setLocalStorageValue(LocalKeys.tournament_status, newValue)
+
+    set(
+      atom_statusTournament,
+      newValue instanceof DefaultValue ? getLocalStorageValue<Status>(LocalKeys.tournament_status) : newValue
+    )
+  }
+})
+
 export {
   selector_players,
   selector_selectedIndex,
-  selector_tournamentInformation
+  selector_tournamentInformation,
+  selector_isTournamentStart,
+  selector_statusTournament
 }

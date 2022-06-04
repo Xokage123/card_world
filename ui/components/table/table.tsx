@@ -1,5 +1,7 @@
 import { FC } from 'react';
 
+import { H4 } from 'ui/components/title';
+
 import {
   Table as TableMaterial,
   TableBody,
@@ -25,12 +27,15 @@ export const Table: FC<Props> = (props) => {
             {
               headers.map(row => {
                 return (
-                  <TableCell align="center"   key={row}>{row}</TableCell>
+                  <TableCell align="center"key={row}>
+                    <H4>{row}</H4>
+                  </TableCell>
                 )
               })
             }
           </TableRow>
         </TableHead>
+        
         <TableBody>
           {children}
         </TableBody>

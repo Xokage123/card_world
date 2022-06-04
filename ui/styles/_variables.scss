@@ -1,10 +1,16 @@
+@import './keyframes';
+
 $font-weight-bold: 700;
 
 $font-size-13: 13px;
 $font-size-14: 15px;
 $font-size-24: 24px;
 
+$animate-blink: blinker 3s linear infinite;
+
 $modal-padding: 20px;
 $notification-padding: 10px;
 
-$notification-information-color: #6363f0;
+$theme-information-color: #7a7af0;
+$theme-success-color: #a1eba7;
+$theme-error-color: #f99e9c;

@@ -1,22 +1,26 @@
 import { FC, useMemo } from 'react';
 import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
 import { useRecoilState, useRecoilValue } from "recoil";
+import cn from 'classnames';
 
 import {
   selector_players,
-  selector_selectedIndex
-} from 'reacoil/atoms/tournament'
+  selector_selectedIndex,
+  selector_statusTournament
+} from 'reacoil/atoms/tournament';
 
-import { Typography } from '@mui/material';
 import { H3 } from 'ui/components/title/title';
 
 import { Players } from './components/Players';
+
+import { statusTournament } from './const';
 
 import styles from './bracket.module.scss';
 
 const Bracket: FC = () => {
   const players = useRecoilValue(selector_players);
   const [selectedIndex, setSelectedIndex] = useRecoilState(selector_selectedIndex);
+  const statusTournamentKey = useRecoilValue(selector_statusTournament);
 
   const onSelect = (index: number) => {
     setSelectedIndex(index)
@@ -40,9 +44,19 @@ const Bracket: FC = () => {
       )
     },
   ], [players])
+
   return (
     <section className='full-width'>
-      <H3>Турнирная Информация</H3>
+      <div className={styles.titleContainer}>
+        <H3>Турнирная Информация</H3>
+        {
+          statusTournamentKey && (
+            <span className={cn(`theme-text--${statusTournament[statusTournamentKey].theme}`, styles.titleStatus)}>
+              {statusTournament[statusTournamentKey].text}
+            </span>
+          )
+        }
+      </div>
 
       <Tabs
         onSelect={onSelect}
@@ -74,8 +88,4 @@ const Bracket: FC = () => {
   );
 }
 
-export default Bracket
-function select_selectedIndex(select_selectedIndex: any): [any, any] {
-  throw new Error('Function not implemented.');
-}
-
+export default Bracket;

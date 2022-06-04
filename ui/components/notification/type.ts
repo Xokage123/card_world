@@ -1,8 +1,10 @@
+import { Theme } from "const/theme";
+
 import { NotificationName } from "reacoil/atoms/modal/const";
 
 export interface NotificationProps {
   name: NotificationName;
-  theme?: NotificationTheme;
+  theme?: Theme;
   title: string;
   text: string;
   successCallback: () => void;
@@ -11,8 +13,4 @@ export interface NotificationProps {
     cancel?: string;
     apply?: string;
   }
-}
-
-export enum NotificationTheme {
-  information = 'information'
 }

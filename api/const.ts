@@ -14,7 +14,9 @@ export enum LocalKeys {
   user_information_tournament = 'user_information_tournament',
   is_regular_tournament = 'is_regular_tournament',
   tournament_players = 'tournament_players',
-  status_auth = 'status_auth'
+  status_auth = 'status_auth',
+  isTournamentStar = 'isTournamentStar',
+  tournament_status = 'tournament_status'
 }
 
 export enum StatusAuth {

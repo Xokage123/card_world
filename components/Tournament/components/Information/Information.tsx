@@ -1,7 +1,14 @@
 import { FC } from 'react';
-import { useRecoilState } from 'recoil';
+import {
+  useRecoilState,
+  useSetRecoilState
+} from 'recoil';
 
 import { GamesMode, GamesName } from 'backend/models/Games'
+
+import { removeLocalStorageValue } from 'helpers/local_storage';
+
+import { LocalKeys } from 'api/const'
 
 import { Typography, Button } from '@mui/material';
 
@@ -10,7 +17,10 @@ import { H3 } from 'ui/components/title/title';
 import {
   selector_isRegularTournament
 } from 'reacoil/atoms/games';
-import { selector_tournamentInformation } from 'reacoil/atoms/tournament';
+import {
+  selector_isTournamentStart,
+  selector_tournamentInformation
+} from 'reacoil/atoms/tournament';
 
 import styles from './information.module.scss';
 
@@ -18,9 +28,17 @@ const Information: FC = (props) => {
   const [information, setInformation] = useRecoilState(selector_tournamentInformation)
   const [isRegularMode, setIsRegularMode] = useRecoilState(selector_isRegularTournament)
 
+  const setIsTournamentStart = useSetRecoilState(selector_isTournamentStart); 
+
   const handleStartNewTournament = () => {
-    setInformation(null)
-    setIsRegularMode(null)
+
+    setInformation(null);
+    setIsRegularMode(null);
+
+    removeLocalStorageValue(LocalKeys.tournament_players);
+    removeLocalStorageValue(LocalKeys.is_regular_tournament);
+
+    setIsTournamentStart(false);
   }
 
   if (!information) return null

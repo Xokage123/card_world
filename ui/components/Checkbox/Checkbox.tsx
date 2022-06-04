@@ -3,9 +3,9 @@ import { FC, ChangeEvent } from 'react';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import CheckboxMaterial from '@mui/material/Checkbox';
 
-import {Props} from './types'
+import { Props } from './types'
 
-import styles from './checkbox.module.scss';
+import { sx_label, sx_checkbox } from './sx';
 
 export const Checkbox: FC<Props> = (props) => {
   const { label, checked, handleChecked } = props
@@ -17,6 +17,17 @@ export const Checkbox: FC<Props> = (props) => {
   }
 
   return (
-    <FormControlLabel control={<CheckboxMaterial checked={checked} onChange={onChange} defaultChecked />} label={label} />
+    <FormControlLabel
+      sx={sx_label}
+      control={
+        <CheckboxMaterial
+          sx={sx_checkbox}
+          checked={checked}
+          onChange={onChange}
+          defaultChecked
+        />
+      }
+      label={label}
+    />
   );
 }

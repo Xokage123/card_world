@@ -27,10 +27,35 @@ input {
   caret-color: transparent;
 }
 
-.notification {
-  &-information {
-    background-color: $notification-information-color;
+.theme {
+  &-background {
+    &--information {
+      background-color: $theme-information-color;
+    }
+
+    &--success {
+      background-color: $theme-success-color;
+    }
+
+    &--error {
+       background-color: $theme-error-color;
+    }
   }
+
+  &-text {
+     &--information {
+       color: $theme-information-color;
+     }
+
+     &--success {
+       color: $theme-success-color;
+     }
+
+      &--error {
+        color: $theme-error-color;
+      }
+  }
+
 }
 
 .p0 {

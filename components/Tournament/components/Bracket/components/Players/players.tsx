@@ -1,4 +1,4 @@
-import { FC, useMemo, ChangeEvent } from 'react';
+import { FC, useMemo } from 'react';
 import uuid from 'react-uuid';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
@@ -12,13 +12,12 @@ import { AddPlayerModal } from './modals/add_player_modal'
 import {
   TableCell,
   TableRow,
-  Button,
-  Checkbox
 } from '@mui/material';
 
 import {
   selector_players,
   selector_selectedIndex,
+  selector_statusTournament,
 } from 'reacoil/atoms/tournament'
 import {
   ModalName, NotificationName
@@ -26,21 +25,24 @@ import {
 
 import styles from './players.module.scss';
 import { H3 } from 'ui/components/title/title';
+import { Button } from 'ui/components/button';
+import { Checkbox } from 'ui/components/checkbox';
+import { Status } from 'reacoil/atoms/tournament/types';
 
 export const Players: FC = () => {
-  const [players, setPlayers] = useRecoilState(selector_players)
-  const setSelectedIndex = useSetRecoilState(selector_selectedIndex)
+  const [players, setPlayers] = useRecoilState(selector_players);
+  const [statusTournament, setStatusTournament] = useRecoilState(selector_statusTournament);
+
+  const setSelectedIndex = useSetRecoilState(selector_selectedIndex);
 
   const { handleOpenModal } = useModal()
 
-  const handleChangePayment = (nick: string) => (event: ChangeEvent<HTMLInputElement>) => {
-    const newIsPayment = event.target.checked;
-
+  const handleChangePayment = (nick: string) => (newValue: boolean) => {
     setPlayers(players.map(player => {
       if (player.nick === nick) {
         return {
           ...player,
-          isPayment: newIsPayment
+          isPayment: newValue
         }
       }
 
@@ -52,24 +54,38 @@ export const Players: FC = () => {
     'Игрок',
     'Колличество очков',
     'Место',
-    'Оплата турнира'
+    'Оплата'
   ], [])
 
   const handleDeletePlayer = (id: string) => () => {
-    const newPlayer = players.filter(player => player.id !== id)
+    const newPlayer = players.filter(player => player.id !== id);
 
-    setPlayers(newPlayer)
+    setPlayers(newPlayer);
   }
 
   const handleStartTournament = () => {
-    setSelectedIndex(2)
+    setStatusTournament(Status.main);
+
+    setSelectedIndex(2);
   }
 
   return (
     <>
       <div className={styles.buttons}>
-        <Button onClick={handleOpenModal(ModalName.add_player)} variant="contained">Добавить участника</Button>
-        <Button onClick={handleOpenModal(NotificationName.start_tournament)} className={styles.button_start} variant="contained">Начать турнир</Button>
+        {
+          statusTournament === Status.preparation && (
+            <>
+              <Button onClick={handleOpenModal(ModalName.add_player)} color='info' variant="contained">Добавить участника</Button>
+              <Button onClick={handleOpenModal(NotificationName.start_tournament)} className={styles.button_start} variant="contained">Начать турнир</Button>
+            </>
+          )
+        }
+        
+        {
+          statusTournament === Status.main && (
+            <Button color='warning' variant="contained">Завершить турнир</Button>
+          )
+        }
       </div>
 
       <H3>Участники турнира</H3>
@@ -87,7 +103,7 @@ export const Players: FC = () => {
               <TableCell align="center" component="th" scope="row">{points}</TableCell>
               <TableCell align="center" component="th" scope="row">{place}</TableCell>
               <TableCell align="center" component="th" scope="row">
-                <Checkbox onChange={handleChangePayment(nick)} checked={isPayment} />
+                <Checkbox handleChecked={handleChangePayment(nick)} checked={isPayment} />
               </TableCell>
               <TableCell align="center" component="th" scope="row">
                 <button onClick={handleDeletePlayer(id)}>Удалить</button>
