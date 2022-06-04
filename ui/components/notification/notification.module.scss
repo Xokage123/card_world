@@ -1,0 +1,17 @@
+@import "ui/styles/variables";
+
+.top,
+.buttons,
+.main {
+  padding: $notification-padding;
+}
+
+.top {
+  border-radius: 5px;
+}
+
+.buttons {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}

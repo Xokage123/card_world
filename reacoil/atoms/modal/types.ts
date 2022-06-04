@@ -1,5 +1,5 @@
-import { ModalName } from "./const";
+import { ModalName, NotificationName } from "./const";
 
 export type Modals =  {
-  [key in ModalName]?: boolean
+  [key in ModalName | NotificationName]?: boolean
 }

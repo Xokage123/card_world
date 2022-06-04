@@ -1,0 +1,1 @@
+export const minimumPlayers = 4;

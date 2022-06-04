@@ -3,6 +3,7 @@ import uuid from 'react-uuid';
 import { useRecoilState, useSetRecoilState } from 'recoil';
 
 import { Table } from 'ui/components/table';
+import { Notification } from 'ui/components/notification';
 
 import useModal from 'hooks/modal.hook';
 
@@ -20,7 +21,7 @@ import {
   selector_selectedIndex,
 } from 'reacoil/atoms/tournament'
 import {
-  ModalName
+  ModalName, NotificationName
 } from 'reacoil/atoms/modal/const'
 
 import styles from './players.module.scss';
@@ -68,9 +69,9 @@ export const Players: FC = () => {
     <>
       <div className={styles.buttons}>
         <Button onClick={handleOpenModal(ModalName.add_player)} variant="contained">Добавить участника</Button>
-        <Button onClick={handleStartTournament} className={styles.button_start} variant="contained">Начать турнир</Button>
+        <Button onClick={handleOpenModal(NotificationName.start_tournament)} className={styles.button_start} variant="contained">Начать турнир</Button>
       </div>
-      
+
       <H3>Участники турнира</H3>
 
       <Table headers={headersTable}>
@@ -95,6 +96,13 @@ export const Players: FC = () => {
           )
         })}
       </Table>
+
+      <Notification
+        title='Начать турнир'
+        text={`Вы действительно хотите начать турнир с ${players.length} игроками?`}
+        name={NotificationName.start_tournament}
+        successCallback={handleStartTournament}
+      />
 
       <AddPlayerModal />
     </>

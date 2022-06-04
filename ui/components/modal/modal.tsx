@@ -1,6 +1,7 @@
 import { FC } from 'react';
 import { useUnmount } from 'react-use';
 import { useRecoilValue } from 'recoil';
+import cn from 'classnames';
 
 import { Modal as ModalMaterial } from '@mui/material';
 
@@ -15,7 +16,11 @@ import { Props } from './type';
 import styles from './modal.module.scss';
 
 export const Modal: FC<Props> = (props) => {
-  const { children, name } = props;
+  const {
+    children,
+    name,
+    isNotification = false
+  } = props;
 
   useUnmount(() => {
     onClose();
@@ -29,6 +34,10 @@ export const Modal: FC<Props> = (props) => {
 
   const isOpen = modals[name] ? !!modals[name] : false;
 
+  const classContainer = cn(styles.backdrop, {
+    [styles.backdrop_notification]: isNotification
+  });
+
   return (
     <ModalMaterial
       open={isOpen}
@@ -36,7 +45,7 @@ export const Modal: FC<Props> = (props) => {
       aria-labelledby="modal-modal-title"
       aria-describedby="modal-modal-description"
     >
-      <div className={styles.backdrop}>
+      <div className={classContainer}>
         {children}
       </div>
     </ModalMaterial>

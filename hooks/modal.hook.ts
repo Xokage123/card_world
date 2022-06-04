@@ -4,7 +4,7 @@ import { useRecoilState } from "recoil"
 import {
   atom_modals,
 } from 'reacoil/atoms/modal'
-import { ModalName } from "reacoil/atoms/modal/const"
+import { ModalName, NotificationName } from "reacoil/atoms/modal/const"
 import { Modals } from "reacoil/atoms/modal/types";
 
 const useModal = () => {
@@ -14,14 +14,14 @@ const useModal = () => {
     handleCloseAll()
   })
 
-  const handleCloseModal = (name: ModalName) => () => {
+  const handleCloseModal = (name: ModalName | NotificationName) => () => {
     setModals({
       ...modals,
       [name]: false
     })
   }
 
-  const handleOpenModal = (name: ModalName) => () => {
+  const handleOpenModal = (name: ModalName | NotificationName) => () => {
     setModals({
       ...modals,
       [name]: true

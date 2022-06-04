@@ -1,15 +1,23 @@
+@import "ui/styles/variables";
+
 .backdrop {
   position: absolute;
   top: 50%;
   left: 50%;
-  padding: 20px;
+  padding: $modal-padding;
 
   background-color: white;
 
   border: 1px solid black;
+
   border-radius: 5px;
 
   box-shadow: 24;
 
   transform: translate(-50%, -50%);
+
+  &_notification {
+    padding: 0;
+    border: none;
+  }
 }
