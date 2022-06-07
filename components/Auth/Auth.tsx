@@ -59,7 +59,7 @@ export const AuthContent: FC = () => {
     try {
       fetch_postAuth({
         data: values,
-        successСallback: async (data) => {
+        successCallback: async (data) => {
           const { email } = values
           const { token } = data
 
@@ -69,7 +69,7 @@ export const AuthContent: FC = () => {
             params: {
               email
             },
-            successСallback: (data) => {
+            successCallback: (data) => {
               toast.success('Вы успешно авторизировались!', {
                 toastId: LINKS.auth
               })

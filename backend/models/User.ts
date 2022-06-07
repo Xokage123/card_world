@@ -20,14 +20,15 @@ export interface Role {
 }
 
 export interface User {
-  email: string
-  password: string
+  email: string;
+  password: string;
+  game_token: string;
   initials: {
-    name: string,
-    surname: string,
-    patronymic?: string
+    name: string;
+    surname: string;
+    patronymic?: string;
   }
-  role: Role[]
+  role: Role[];
 }
 
 export interface UserPublic {

@@ -7,18 +7,18 @@ import { Response, PointProps } from 'api/types'
 import { Nullable } from "types/global"
 
 export const checkCallbacks = <P, A>(response: AxiosResponse<Response<A>>, props: PointProps<P, A>) => {
-  const { successСallback, errorСallback } = props
+  const { successCallback, errorCallback } = props
 
   const { data, error } = response.data
 
 
-  if (successСallback && data) {
-    successСallback(data)
+  if (successCallback && data) {
+    successCallback(data)
   }
 
   if (error) {
     toast.error(error)
-    errorСallback && errorСallback(error)
+    errorCallback && errorCallback(error)
   }
 }
 

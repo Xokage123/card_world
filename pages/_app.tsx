@@ -1,17 +1,20 @@
-import type { AppProps } from 'next/app'
-import Head from 'next/head'
+import type { AppProps } from 'next/app';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useCallback, useEffect, useState } from 'react';
-import { ToastContainer } from 'react-toastify'
-import { RecoilRoot } from 'recoil'
+import { ToastContainer } from 'react-toastify';
+import { useMount } from 'react-use';
+import { RecoilRoot } from 'recoil';
 
-import instance from 'api';
-import { LocalKeys, StatusAuth, URL } from 'api/const';
+import { LocalKeys, StatusAuth } from 'api/const';
+import { fetch_connectMongoDB } from 'api/points';
 
 import { ThemeProvider } from '@mui/material/styles';
 
 import { Layout } from 'components/Layout'
 import { MainContainer } from 'components/MainContainer';
+
+import { getLocalStorageValue } from 'helpers/local_storage';
 
 import { themeMaterial } from 'const/styles';
 import { linksWithoutLayout, startPageLink } from 'const/links';
@@ -23,13 +26,13 @@ import 'react-tabs/style/react-tabs.css';
 import 'react-toastify/dist/ReactToastify.css';
 import 'styles/globals.scss'
 import 'components/Error/error.sass';
-import { getLocalStorageValue } from 'helpers/local_storage';
-import { useMount } from 'react-use';
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
   const router = useRouter()
 
   useMount(() => {
+    fetch_connectMongoDB({})
+
     const authStatus = getLocalStorageValue<StatusAuth>(LocalKeys.status_auth)
 
     if (authStatus && authStatus === StatusAuth.no_auth) {
@@ -38,12 +41,6 @@ const MyApp = ({ Component, pageProps }: AppProps) => {
       })
     }
   })
-
-  useEffect(() => {
-    instance({
-      url: URL.db_connect
-    })
-  }, [])
 
   const [isShowLayout, setIsShowLayout] = useState<boolean>(false)
 

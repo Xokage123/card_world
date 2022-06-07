@@ -24,14 +24,14 @@ export enum StatusAuth {
   token_auth = 'token_auth'
 }
 
-export const URL = {
-  user: '/user',
-  games: '/games',
-  email: '/email',
-  auth: '/auth',
-  db_connect: '/db_connect',
-  check_role_user: '/check_role_user',
-  tournament: '/tournament',
+export enum URL {
+  user = '/user',
+  games = '/games',
+  email = '/email',
+  auth= '/auth',
+  db_connect = '/db_connect',
+  check_role_user = '/check_role_user',
+  tournament = '/tournament',
 }
 
 export enum METHODS {

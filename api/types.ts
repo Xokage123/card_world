@@ -1,12 +1,20 @@
-import { Nullable } from "types/global"
+import { Nullable } from "types/global";
 
-export interface PointProps<T, B> {
+import { METHODS, URL } from "./const";
+
+export interface Config {
+  auth?: boolean;
+  method?: METHODS;
+  url: URL;
+}
+
+export interface Props<T, B> {
   data?: T;
-  successСallback?: (data: B) => void;
-  errorСallback?: (data: string) => void;
   params?: {
     [k: string]: string | number
   };
+  successCallback?: (data: B) => void;
+  errorCallback?: (data: string) => void;
 }
 
 export interface Response<T> {

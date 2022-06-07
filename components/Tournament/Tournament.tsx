@@ -10,9 +10,7 @@ import {
   useSetRecoilState
 } from 'recoil'
 
-import instance from 'api'
-import { URL, METHODS, LocalKeys } from 'api/const'
-import { Response } from 'api/types'
+import { URL, LocalKeys } from 'api/const'
 
 import { RoleUser } from 'backend/models/User'
 import { Modes, Names } from 'backend/models/Games';
@@ -54,6 +52,7 @@ import {
 } from 'reacoil/atoms/tournament/types';
 
 import styles from './tournament.module.scss';
+import { fetch_postCheckUserRole } from 'api/points';
 
 export const Tournament: FC = () => {
   const [open, setOpen] = useState(true);
@@ -152,22 +151,15 @@ export const Tournament: FC = () => {
     setMode(newValue)
   }
 
-  const handleCheckUser = async (body: Body) => {
-    try {
-      const response = await instance({
-        method: METHODS.POST,
-        url: URL.check_role_user,
-        data: body
-      })
-
-      const { data, error }: Response<string> = response.data
-
-      if (data) {
+  const handleCheckUser = async (data: Body) => {
+    fetch_postCheckUserRole({
+      data,
+      successCallback: () => {
         toast.success('Доступ для проведения турнира разрешен', {
           toastId: URL.check_role_user
         })
 
-        const { gameName, gameMode, status, email } = body
+        const { gameName, gameMode, status, email } = data;
 
         const information: TournamentInformation = {
           email,
@@ -180,16 +172,15 @@ export const Tournament: FC = () => {
         setInformation(information)
 
         setIsCheckTournament(true)
-      }
-
-      if (error) {
+      },
+      errorCallback: (error) => {
         toast.error(error, {
           toastId: URL.check_role_user
         })
 
         removeLocalStorageValue(LocalKeys.user_information_tournament)
       }
-    } catch (error) { }
+    })
   }
 
   const handleSubmit = (values: Values) => {

@@ -1,13 +1,9 @@
-import { AxiosResponse } from 'axios';
 import { FC, useEffect, ReactNode, useCallback } from "react";
 import { toast } from 'react-toastify';
 import { useSetRecoilState } from "recoil";
 
-import instance from 'api';
 import { URL } from 'api/const';
-import { Response } from 'api/types';
-
-import { Game } from 'backend/models/Games';
+import { fetch_getGames } from 'api/points';
 
 import {
   atom_games,
@@ -25,23 +21,17 @@ const StartProvider: FC<Props> = (props) => {
   const setActualGame = useSetRecoilState(selector_actualGame)
 
   const fetchGetGames = useCallback(() => {
-    instance({
-      url: URL.games
+    fetch_getGames<{}>({
+      successCallback: (data) => {
+        setGames(data)
+        setActualGame(data[0].name)
+      },
+      errorCallback: (error) => {
+        toast.error(error, {
+          toastId: URL.games
+        })
+      }
     })
-      .then((response: AxiosResponse<Response<Game[]>>) => {
-        const { data, error } = response.data
-
-        if (data) {
-          setGames(data)
-          setActualGame(data[0].name)
-        }
-
-        if (error) {
-          toast.error(error, {
-            toastId: URL.games
-          })
-        }
-      })
   }, [setActualGame, setGames])
 
   useEffect(() => {

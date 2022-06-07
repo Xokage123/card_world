@@ -1,5 +1,6 @@
+import { getLocalStorageValue } from 'helpers/local_storage';
 import axios, { AxiosResponse, AxiosError } from "axios";
-import { BASE_API_URL } from "./const";
+import { BASE_API_URL, LocalKeys } from "./const";
 
 const handleResponseSuccess = (response: AxiosResponse) => {
 
@@ -11,9 +12,16 @@ const handleResponseError = (error: AxiosError) => {
 }
 
 const instance = axios.create({
-  baseURL: BASE_API_URL
+  baseURL: BASE_API_URL,
+  headers: {
+    'Auth': `Bearer ${getLocalStorageValue<string>(LocalKeys.user_token)}`
+  }
+})
+
+const auth_instance = axios.create({
+  baseURL: BASE_API_URL,
 })
 
 instance.interceptors.response.use(handleResponseSuccess, handleResponseError)
 
-export default instance
+export { instance, auth_instance }

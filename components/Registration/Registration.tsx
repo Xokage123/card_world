@@ -1,21 +1,22 @@
 import { useRouter } from 'next/router';
 import { FC, useMemo } from 'react';
+import { toast } from 'react-toastify';
 import { Formik, Field, Form, FormikProps, FieldProps } from 'formik';
 
 import { Typography, Button } from '@mui/material';
 
 import { schema } from './schema';
 
+import { URL } from 'api/const';
+import { fetch_postCodeOnEmail } from 'api/points';
+
 import { FIELDS, IField, Values } from './types';
+
+import { FetchEmail } from 'pages/api/email';
 
 import { FieldElement } from 'ui/components/input'
 
 import styles from './registration.module.scss';
-import instance from 'api';
-import { URL } from 'api/const';
-import { FetchEmail } from 'pages/api/email';
-import { toast } from 'react-toastify';
-import { AxiosError } from 'axios';
 
 export const RegistrationContent: FC = () => {
   const router = useRouter()
@@ -51,17 +52,13 @@ export const RegistrationContent: FC = () => {
       toastId: URL.email
     })
 
-    instance({
-      url: URL.email,
-      method: 'POST',
-      data
-    })
-    .then((res) => {
-      toast.success(`Мы отправили код на почту: ${email}`, {
-        toastId: URL.email
-      })
-    })
-    .catch((error: AxiosError<FetchEmail>) => {
+    fetch_postCodeOnEmail({
+      data,
+      successCallback: () => {
+        toast.success(`Мы отправили код на почту: ${email}`, {
+          toastId: URL.email
+        })
+      }
     })
   }
 
