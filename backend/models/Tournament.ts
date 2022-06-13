@@ -1,11 +1,9 @@
-import { Schema } from 'mongoose'
+import { Schema } from 'mongoose';
 
 import getSchema from 'backend/helpers/getSchema';
 
-export interface Tournament {
+export interface Tournament {}
 
-}
+const schema = new Schema<Tournament>({});
 
-const schema = new Schema<Tournament>({})
-
-export default getSchema('Tournament', schema)
+export default getSchema('Tournament', schema);

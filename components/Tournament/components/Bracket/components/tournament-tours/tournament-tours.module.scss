@@ -1,0 +1,47 @@
+@import 'ui/styles/variables';
+
+.container {
+  max-width: 100%;
+  overflow: auto;
+  max-height: 600px;
+}
+
+.tour {
+  &Container {
+    margin-bottom: 20px;
+  }
+
+  &Container + &Container {
+    margin-left: 15px;
+  }
+
+  &List {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+}
+
+.pair {
+  &Container {
+    border: 1px solid black;
+    border-radius: $border-radius-m;
+  }
+
+  &Title {
+    padding: 10px;
+  }
+
+  &List {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+.player {
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+}

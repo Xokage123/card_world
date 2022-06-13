@@ -6,28 +6,21 @@ import {
   MenuItem,
   FormControl,
   Select as MaterialSelect,
-  SelectChangeEvent
+  SelectChangeEvent,
 } from '@mui/material';
 
-import { Props } from './types'
+import { Props } from './types';
 
 import styles from './select.module.scss';
 
 export const Select: FC<Props<string>> = (props) => {
-  const {
-    value,
-    onChange,
-    options,
-    name,
-    label,
-    disabled
-  } = props
+  const { value, onChange, options, name, label, disabled } = props;
 
   const handleChange = (event: SelectChangeEvent<string>) => {
-    const value = event.target.value
+    const value = event.target.value;
 
-    onChange(value)
-  }
+    onChange(value);
+  };
 
   return (
     <Box sx={{ minWidth: 120 }}>
@@ -38,19 +31,18 @@ export const Select: FC<Props<string>> = (props) => {
           labelId={name}
           value={value}
           label={label}
-          onChange={handleChange}
-        >
-          {
-            options.map(option => {
-              const { value, label } = option
+          onChange={handleChange}>
+          {options.map((option) => {
+            const { value, label } = option;
 
-              return (
-                <MenuItem key={value} value={value}>{label}</MenuItem>
-              )
-            })
-          }
+            return (
+              <MenuItem key={value} value={value}>
+                {label}
+              </MenuItem>
+            );
+          })}
         </MaterialSelect>
       </FormControl>
     </Box>
   );
-}
+};

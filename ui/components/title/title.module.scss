@@ -1,5 +1,5 @@
-@import "ui/styles/variables";
-@import "ui/styles/mixins";
+@import 'ui/styles/variables';
+@import 'ui/styles/mixins';
 
 .title {
   margin: 0;
@@ -12,14 +12,14 @@
   }
 
   &_4 {
-    @include font-size(20);
-  }
-
-  &_5 {
     @include font-size(18);
   }
 
+  &_5 {
+    @include font-size(14);
+  }
+
   &_6 {
-     @include font-size(16);
+    @include font-size(10);
   }
 }

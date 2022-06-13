@@ -1,4 +1,16 @@
-@import "ui/styles/variables";
+@import 'ui/styles/variables';
+
+.container {
+  position: relative;
+}
+
+.icon {
+  &_close {
+    position: absolute;
+    top: $notification-padding;
+    right: $notification-padding;
+  }
+}
 
 .top,
 .buttons,

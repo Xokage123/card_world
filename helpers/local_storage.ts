@@ -1,56 +1,57 @@
 import { Nullable } from 'types/global';
 
-import { LocalKeys } from 'api/const'
+import { LocalKeys } from 'api/const';
 
-const isWindow = typeof window !== "undefined"
+const isWindow = typeof window !== 'undefined';
+const isServer = typeof window === 'undefined';
 
 const getLocalStorageValue = <T>(key: LocalKeys): Nullable<T> => {
   if (isWindow) {
-    const valueJSON = localStorage.getItem(key)
+    const valueJSON = localStorage.getItem(key);
 
-    if (!valueJSON) return null
+    if (!valueJSON) return null;
 
-    const value: T = JSON.parse(valueJSON)
+    const value: T = JSON.parse(valueJSON);
 
-    return value
+    return value;
   }
 
-  return null
-}
+  return null;
+};
 
 const getLocalStorageArray = <T>(key: LocalKeys): T[] => {
   if (isWindow) {
-    const valueJSON = localStorage.getItem(key)
+    const valueJSON = localStorage.getItem(key);
 
-    if (!valueJSON) return []
+    if (!valueJSON) return [];
 
-    const value: T[] = JSON.parse(valueJSON)
+    const value: T[] = JSON.parse(valueJSON);
 
-    return value
+    return value;
   }
 
-  return []
-}
+  return [];
+};
 
 const setLocalStorageValue = <T>(key: LocalKeys, value: Nullable<T>): void => {
   if (isWindow) {
     if (value) {
-      localStorage.setItem(key, JSON.stringify(value))
+      localStorage.setItem(key, JSON.stringify(value));
     } else {
-      removeLocalStorageValue(key)
+      removeLocalStorageValue(key);
     }
   }
-}
+};
 
 const removeLocalStorageValue = <T>(key: LocalKeys): void => {
   if (isWindow) {
-    localStorage.removeItem(key)
+    localStorage.removeItem(key);
   }
-}
+};
 
 export {
   getLocalStorageValue,
   getLocalStorageArray,
   setLocalStorageValue,
-  removeLocalStorageValue
-}
+  removeLocalStorageValue,
+};

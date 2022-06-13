@@ -1,6 +1,6 @@
-import { Theme } from "const/theme";
+import { Theme } from 'const/theme';
 
-import { Status, StatusTournament } from "reacoil/atoms/tournament/types";
+import { Status, StatusTournament } from 'reacoil/atoms/tournament/types';
 
 export const statusTournament: StatusTournament = {
   [Status.preparation]: {
@@ -15,4 +15,6 @@ export const statusTournament: StatusTournament = {
     text: 'Турнир оцицально закончен',
     theme: Theme.information,
   },
-}
+};
+
+export const MIN_PLAYERS = 4;

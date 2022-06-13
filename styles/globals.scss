@@ -3,12 +3,13 @@
 @import '@fontsource/roboto/500.css';
 @import '@fontsource/roboto/700.css';
 
-@import "ui/styles/variables";
+@import 'ui/styles/variables';
 
 html,
 body {
   padding: 0;
   margin: 0;
+  overflow-y: hidden;
   box-sizing: border-box;
   font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Oxygen,
     Ubuntu, Cantarell, Fira Sans, Droid Sans, Helvetica Neue, sans-serif;
@@ -23,8 +24,24 @@ a {
   box-sizing: border-box;
 }
 
+ul,
+ol {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
 input {
   caret-color: transparent;
+}
+
+button {
+  outline: none;
+  border: none;
+
+  background-color: inherit;
+
+  cursor: pointer;
 }
 
 .theme {
@@ -38,24 +55,23 @@ input {
     }
 
     &--error {
-       background-color: $theme-error-color;
+      background-color: $theme-error-color;
     }
   }
 
   &-text {
-     &--information {
-       color: $theme-information-color;
-     }
+    &--information {
+      color: $theme-information-color;
+    }
 
-     &--success {
-       color: $theme-success-color;
-     }
+    &--success {
+      color: $theme-success-color;
+    }
 
-      &--error {
-        color: $theme-error-color;
-      }
+    &--error {
+      color: $theme-error-color;
+    }
   }
-
 }
 
 .p0 {
@@ -68,10 +84,36 @@ input {
 
 .full {
   &-width {
-    width: 100%
+    width: 100%;
   }
 
   &-height {
-    height: 100%
+    height: 100%;
+  }
+}
+
+.flex {
+  display: flex;
+
+  &-row {
+    flex-direction: row;
+  }
+
+  &-colum {
+    flex-direction: column;
+  }
+
+  &-align {
+    &_start {
+      align-items: flex-start;
+    }
+
+    &_center {
+      align-items: center;
+    }
+  }
+
+  &-nowrap {
+    flex-wrap: nowrap;
   }
 }

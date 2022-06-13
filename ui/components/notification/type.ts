@@ -1,16 +1,17 @@
-import { Theme } from "const/theme";
+import { Theme } from 'const/theme';
 
-import { NotificationName } from "reacoil/atoms/modal/const";
+import { NotificationName } from 'reacoil/atoms/modal/const';
 
 export interface NotificationProps {
   name: NotificationName;
   theme?: Theme;
   title: string;
   text: string;
+  isShowButtons?: boolean;
   successCallback: () => void;
   cancelCallback?: () => void;
   textButtons?: {
     cancel?: string;
     apply?: string;
-  }
+  };
 }

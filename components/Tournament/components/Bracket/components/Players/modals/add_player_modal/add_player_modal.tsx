@@ -6,7 +6,7 @@ import { selector_players } from 'reacoil/atoms/tournament';
 
 import { Modal } from 'ui/components/modal';
 
-import { ModalName } from 'reacoil/atoms/modal/const'
+import { ModalName } from 'reacoil/atoms/modal/const';
 
 import styles from './add_player_modal.module.scss';
 import { Formik, FormikProps } from 'formik';
@@ -21,21 +21,20 @@ import { Player } from 'reacoil/atoms/tournament/types';
 import useModal from 'hooks/modal.hook';
 
 export const AddPlayerModal: FC = (props) => {
+  const [players, setPlayers] = useRecoilState(selector_players);
 
-  const [players, setPlayers] = useRecoilState(selector_players)
+  const { handleCloseModal } = useModal();
 
-  const { handleCloseModal } = useModal()
+  const isRegular = useRecoilValue(selector_isRegularTournament);
 
-  const isRegular = useRecoilValue(selector_isRegularTournament)
-
-  const [isPayment, setIsPayment] = useState(false)
+  const [isPayment, setIsPayment] = useState(false);
 
   const initialValues = useMemo<Values>(() => {
     return {
       [FIELDS.name]: '',
-      [FIELDS.nickname]: ''
-    }
-  }, [])
+      [FIELDS.nickname]: '',
+    };
+  }, []);
 
   const fields = useMemo<IField[]>(() => {
     const fieldsLocale: IField[] = [
@@ -53,7 +52,7 @@ export const AddPlayerModal: FC = (props) => {
         placeholder: 'Введите ник игрока',
         required: true,
       },
-    ]
+    ];
 
     const fieldKey: IField = {
       title: 'Уникальный номер',
@@ -61,15 +60,15 @@ export const AddPlayerModal: FC = (props) => {
       type: 'text',
       placeholder: 'Введите уникальный номер игрока',
       required: true,
-    }
+    };
 
-    return isRegular ? [...fieldsLocale] : [...fieldsLocale, fieldKey]
-  }, [])
+    return isRegular ? [...fieldsLocale] : [...fieldsLocale, fieldKey];
+  }, []);
 
   const handleSubmit = async (values: Values) => {
-    console.log(values)
+    console.log(values);
 
-    const { name, nickname } = values
+    const { name, nickname } = values;
 
     const newPlayer: Player = {
       id: uuid(),
@@ -77,34 +76,33 @@ export const AddPlayerModal: FC = (props) => {
       nick: nickname,
       points: 0,
       place: 0,
-      isPayment
-    }
+      isPayment,
+    };
 
-    setPlayers([
-      ...players,
-      newPlayer
-    ])
+    setPlayers([...players, newPlayer]);
 
-    handleCloseModal(ModalName.add_player)()
-  }
+    handleCloseModal(ModalName.add_player)();
+  };
 
   const handleToggleIsPayment = (newValue: boolean) => {
-    setIsPayment(newValue)
-  }
+    setIsPayment(newValue);
+  };
 
   const getButtons = (props: FormikProps<Values>) => (
-    <Button disabled={!props.isValid} type="submit" variant="contained">Добавить игрока</Button>
-  )
+    <Button disabled={!props.isValid} type="submit" variant="contained">
+      Добавить игрока
+    </Button>
+  );
 
   const getCheckboxes = () => (
     <>
       <Checkbox
-        label='Оплатил заранее'
+        label="Оплатил заранее"
         checked={isPayment}
         handleChecked={handleToggleIsPayment}
       />
     </>
-  )
+  );
 
   return (
     <Modal name={ModalName.add_player}>
@@ -112,19 +110,16 @@ export const AddPlayerModal: FC = (props) => {
         onSubmit={handleSubmit}
         initialValues={initialValues}
         validationSchema={schema}
-        validateOnChange
-      >
-        {
-          (props: FormikProps<Values>) => (
-            <Form
-              fields={fields}
-              title="Добавление нового игрока"
-              buttonsElement={getButtons(props)}
-              checkboxesElement={getCheckboxes()}
-            />
-          )
-        }
+        validateOnChange>
+        {(props: FormikProps<Values>) => (
+          <Form
+            fields={fields}
+            title="Добавление нового игрока"
+            buttonsElement={getButtons(props)}
+            checkboxesElement={getCheckboxes()}
+          />
+        )}
       </Formik>
     </Modal>
   );
-}
+};

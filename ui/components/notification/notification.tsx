@@ -1,31 +1,34 @@
-import { FC } from "react";
+import { FC } from 'react';
 import cn from 'classnames';
 
-import { Modal } from "ui/components/modal";
-import { H3 } from "ui/components/title";
+import { Modal } from 'ui/components/modal';
+import { H3 } from 'ui/components/title';
 
-import useModal from "hooks/modal.hook";
+import CloseIcon from '@mui/icons-material/Close';
 
-import { Button } from "@mui/material";
+import useModal from 'hooks/modal.hook';
 
-import { NotificationProps } from "./type";
+import { Button } from '@mui/material';
 
-import { Theme } from "const/theme";
+import { NotificationProps } from './type';
+
+import { Theme } from 'const/theme';
 
 import styles from './notification.module.scss';
 
 export const Notification: FC<NotificationProps> = (props) => {
   const {
     theme = Theme.information,
+    isShowButtons = true,
     name,
     title = 'Подтвердите действие',
     text,
     textButtons = {
       cancel: 'Отмена',
-      apply: 'Подтверждаю'
+      apply: 'Подтверждаю',
     },
     successCallback,
-    cancelCallback
+    cancelCallback,
   } = props;
 
   const { handleCloseModal } = useModal();
@@ -34,19 +37,25 @@ export const Notification: FC<NotificationProps> = (props) => {
     handleCloseModal(name)();
 
     if (cancelCallback) {
-      cancelCallback()
+      cancelCallback();
     }
-  }
+  };
 
   const handleSuccess = () => {
     handleCloseModal(name)();
 
     successCallback();
-  }
+  };
 
   return (
     <Modal isNotification name={name}>
       <div className={styles.container}>
+        {!isShowButtons && (
+          <button onClick={handleCancel} className={styles.icon_close}>
+            <CloseIcon />
+          </button>
+        )}
+
         <div className={cn(`theme-background--${theme}`, styles.top)}>
           <H3 className={styles.title}>{title}</H3>
         </div>
@@ -55,11 +64,17 @@ export const Notification: FC<NotificationProps> = (props) => {
           <span className={styles.text}>{text}</span>
         </div>
 
-        <div className={styles.buttons}>
-          <Button variant='outlined' onClick={handleCancel}>{textButtons.cancel}</Button>
-          <Button variant='contained' onClick={handleSuccess}>{textButtons.apply}</Button>
-        </div>
+        {isShowButtons && (
+          <div className={styles.buttons}>
+            <Button variant="outlined" onClick={handleCancel}>
+              {textButtons.cancel}
+            </Button>
+            <Button variant="contained" onClick={handleSuccess}>
+              {textButtons.apply}
+            </Button>
+          </div>
+        )}
       </div>
     </Modal>
-  )
-}
+  );
+};
