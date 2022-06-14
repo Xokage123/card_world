@@ -1,6 +1,6 @@
 import { Theme } from 'const/theme';
 
-import { Status, StatusTournament } from 'reacoil/atoms/tournament/types';
+import { Status, StatusTournament } from 'reacoil/atoms/tournament/type';
 
 export const statusTournament: StatusTournament = {
   [Status.preparation]: {

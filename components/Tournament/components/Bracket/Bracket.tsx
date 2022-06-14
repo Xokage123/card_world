@@ -13,7 +13,8 @@ import {
 import { H3 } from 'ui/components/title/title';
 
 import { Players } from './components/players';
-import { TournamentTours } from './components/tournament-tours';
+import { TournamentTours } from './components/tours';
+import TourActual from './components/tour_actual';
 
 import { statusTournament } from './const';
 
@@ -38,13 +39,13 @@ const Bracket: FC = () => {
         name: 'Участники турнира',
         content: <Players />,
       },
-      {
+      { 
         name: 'Прошлые туры',
         content: <TournamentTours tours={tours} />,
       },
       {
         name: 'Текущий тур',
-        content: <h2>Текущий тур</h2>,
+        content: <TourActual />,
       },
     ],
     [players],

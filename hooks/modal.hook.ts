@@ -6,12 +6,19 @@ import {
 } from 'reacoil/atoms/modal'
 import { ModalName, NotificationName } from "reacoil/atoms/modal/const"
 import { Modals } from "reacoil/atoms/modal/types";
+import { Nullable } from "types/global";
+
+let tokenClear: Nullable<NodeJS.Timeout> = null;
 
 const useModal = () => {
   const [modals, setModals] = useRecoilState(atom_modals);
 
   useUnmount(() => {
-    handleCloseAll()
+    handleCloseAll();
+
+    if (tokenClear) {
+      clearInterval(tokenClear);
+    }
   })
 
   const handleCloseModal = (name: ModalName | NotificationName) => () => {
@@ -19,13 +26,23 @@ const useModal = () => {
       ...modals,
       [name]: false
     })
+
+    if (tokenClear) {
+      clearInterval(tokenClear);
+    }
   }
 
-  const handleOpenModal = (name: ModalName | NotificationName) => () => {
+  const handleOpenModal = (name: ModalName | NotificationName, isAutoClose: boolean = false) => () => {
     setModals({
       ...modals,
       [name]: true
     })
+
+    if (isAutoClose) {
+      tokenClear = setTimeout(() => {
+        handleCloseModal(name)();
+      }, 5000)
+    }
   }
 
   const handleCloseAll = () => {

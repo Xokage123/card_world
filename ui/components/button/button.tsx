@@ -14,6 +14,7 @@ export const Button: FC<ButtonProps> = (props) => {
     children,
     variant = 'contained',
     color = 'info',
+    disabled=false
   } = props;
 
   const classes = cn(styles.button, className)
@@ -24,6 +25,7 @@ export const Button: FC<ButtonProps> = (props) => {
       onClick={onClick}
       variant={variant}
       color={color}
+      disabled={disabled}
     >
       {children}
     </MaterialButton>

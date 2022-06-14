@@ -13,11 +13,10 @@ import { Nullable } from 'types/global';
 
 import {
   Player,
-  PlayerStatus,
   Status,
   Tour,
   TournamentInformation,
-} from './types';
+} from './type';
 
 const atom_players = atom<Player[]>({
   key: 'atom_players',
@@ -138,379 +137,42 @@ const selector_statusTournament = selector<Nullable<Status>>({
   },
 });
 
-const TEST_DATA: Tour[] = [
-  // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ],
-  // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ], // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ], // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ], // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ],
-  // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ], // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ], // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ], // 1st round
-  [
-    // 1st pair
-    [
-      // 1st person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 2nd person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-    // 2nd pair
-    [
-      // 3rd person
-      {
-        name: 'yankouskia',
-        nameLink: 'https://github.com/yankouskia',
-        points: 0,
-        status: PlayerStatus.winner,
-      },
-      // 4th person
-      {
-        name: 'Alex',
-        nameLink: 'https://github.com/yankouskia',
-        points: 2,
-      },
-    ],
-  ],
-];
-
 const atom_tours = atom<Tour[]>({
   key: 'atom_tours',
-  default: TEST_DATA,
+  default: [],
 });
 
 const selector_tours = selector<Tour[]>({
-  key: 'selector_toyrs',
+  key: 'selector_tours',
   get: ({ get }) => {
     const tours = get(atom_tours);
 
     return tours;
   },
 });
+
+const atom_tourActual = atom<Tour>({
+  key: 'atom_tourActual',
+  default: [],
+});
+
+const selector_tourActual = selector<Tour>({
+  key: 'selector_tourActual',
+  get: ({get}) => {
+    const tourActual = get(atom_tourActual);
+
+    return tourActual;
+  },
+  set: ({ set }, newValue) => {
+    set(
+      atom_tourActual,
+      newValue instanceof DefaultValue
+        ? []
+        : newValue,
+    );
+  },
+});
+
 
 export {
   selector_players,
@@ -519,4 +181,5 @@ export {
   selector_isTournamentStart,
   selector_statusTournament,
   selector_tours,
+  selector_tourActual
 };

@@ -23,10 +23,7 @@ export const Notification: FC<NotificationProps> = (props) => {
     name,
     title = 'Подтвердите действие',
     text,
-    textButtons = {
-      cancel: 'Отмена',
-      apply: 'Подтверждаю',
-    },
+    textButtons,
     successCallback,
     cancelCallback,
   } = props;
@@ -67,10 +64,10 @@ export const Notification: FC<NotificationProps> = (props) => {
         {isShowButtons && (
           <div className={styles.buttons}>
             <Button variant="outlined" onClick={handleCancel}>
-              {textButtons.cancel}
+              {textButtons?.cancel ? textButtons.cancel : 'Отмена'}
             </Button>
             <Button variant="contained" onClick={handleSuccess}>
-              {textButtons.apply}
+              {textButtons?.apply ? textButtons.apply : 'Подтвердить'}
             </Button>
           </div>
         )}

@@ -1,1 +1,1 @@
-export { default } from './Bracket';
+export { default } from './bracket';

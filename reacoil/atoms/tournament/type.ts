@@ -11,6 +11,7 @@ export interface Player {
   points: number;
   rating?: number;
   place: number;
+  status?: PlayerStatus;
   isPayment: boolean;
 }
 
@@ -36,14 +37,10 @@ export type StatusTournament = {
   };
 };
 
-export interface TourPlayer {
-  name: string;
-  nameLink?: string;
-  points: 0 | 1 | 2 | 3;
-  status?: PlayerStatus;
-}
-
-export type Pair = TourPlayer[];
+export type Pair = {
+  id: string;
+  players: Player[];
+};
 
 export type Tour = Pair[];
 
@@ -55,4 +52,9 @@ export enum PlayerStatus {
 
 export interface TournamentToursProps {
   data: Tour[];
+}
+
+export interface GeneratePairsProps {
+  players: Player[];
+  number: number;
 }

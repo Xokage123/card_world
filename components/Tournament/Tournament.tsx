@@ -208,6 +208,8 @@ export const Tournament: FC = () => {
         price,
       });
 
+      setPrice('');
+
       setIsTournamentStart(true);
 
       setIsRegularMode(actualGame);
@@ -238,7 +240,11 @@ export const Tournament: FC = () => {
 
   const getPriceInput = () => {
     const onChange = (newValue: string) => {
-      setPrice(newValue);
+      if (newValue.startsWith('0')) {
+        setPrice(newValue.slice(1));
+      } else {
+        setPrice(newValue);
+      }
     };
 
     return (
